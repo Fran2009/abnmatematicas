@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método ABN - Casita de Descomposición</title>
+  <link rel="stylesheet" href="css/casita.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/cookie-modal.css">
+</head>
+<body>
+  
+  <div class="container">
+    <h1>Método ABN - Casita de Descomposición</h1>
+    
+    <p>
+      La Casita de Descomposición es una estrategia del método ABN que ayuda a descomponer números de forma visual y flexible. Se representa con una casa donde el número principal está en el tejado y sus descomposiciones en las habitaciones. Permite dividir los números de diferentes maneras, facilitando el cálculo mental y la comprensión matemática.
+    </p>
+    <p>
+      Selecciona el nivel de dificultad numérica y haz clic en "Generar número". Verás una casita con el número a descomponer. Si los valores introducidos son correctos, se marcarán en verde y se generará automáticamente una nueva línea. Además, se validará la suma para garantizar que sea correcta. Ejemplo número 39, 3 decenas, 9 unidades en suma habría que poner 30+9. ¡Buena suerte!
+    </p>
+
+    <label for="nivel">Nivel:</label>
+    <select id="nivel">
+      <option value="1">Nivel 1 (10 - 99)</option>
+      <option value="2">Nivel 2 (100 - 999)</option>
+      <option value="3">Nivel 3 (1000 - 9999)</option>
+      <option value="4">Nivel 4 (10000 - 99999)</option>
+      <option value="5">Nivel 5 (100000 - 999999)</option>
+    </select>
+    <br><br>
+    <button id="btnGenerar" onclick="generarNumero()">Generar Número</button>
+
+    <!-- Contenedor de la casita (se muestra debajo de los botones) -->
+    <div id="casitaContainer" style="display: none;">
+      <table id="tablaCasita">
+        <thead id="casitaHead">
+          <!-- Se generan dos filas: la del tejado y la de encabezados -->
+        </thead>
+        <tbody id="casitaBody">
+          <!-- Se agregarán dinámicamente las filas para la descomposición -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="cookie-modal-container"></div>
+  <script src="js/casita.js?v=1.0.0"></script>
+  <script src="js/navbar.js?v=1.0.0"></script>
+  <script src="js/footer.js?v=1.0.0"></script>
+  <script src="js/cookie-modal.js?v=1.0.0"></script>
+  <script src="js/analytics.js?v=1.0.0"></script>
+  
+</body>
+</html>

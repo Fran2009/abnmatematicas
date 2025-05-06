@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método ABN - Numeración y Conteo</title>
+  <link rel="stylesheet" href="css/numeracion.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/cookie-modal.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Método ABN - Numeración y Conteo</h1>
+
+    <p>
+      La tabla de numeración y conteo hasta 100 es una herramienta visual que ayuda a los estudiantes a comprender los números y su secuencia. Organizada en filas y columnas, permite identificar patrones, contar de manera ordenada y visualizar las relaciones entre los números. Esta tabla refuerza habilidades como el conteo, la descomposición numérica y la comprensión de conceptos como pares e impares o múltiplos.
+    </p>
+    <p>
+      Selecciona el tipo de operación deseada y pulsa en "Generar números". Si haces clic en el número correcto, este se marcará en verde. En cambio, si seleccionas uno incorrecto, parpadeará en rojo. ¡Así de sencillo!<br>Ejemplo, 5 + 6, habría que pulsar en 11.
+    </p>
+    <div class="controls">
+      <label for="operacion">Operación:</label>
+      <select id="operacion">
+        <option value="suma">Suma</option>
+        <option value="resta">Resta</option>
+      </select>
+      <br><br>
+      <button id="generarBtn">Generar Números</button>
+    </div>
+    <div id="mensaje"></div>
+    <div id="grid-container"></div>
+  </div>
+  <div id="cookie-modal-container"></div>
+
+  <script src="js/numeracion.js?v=1.0.0"></script>
+  <script src="js/navbar.js?v=1.0.0"></script>
+  <script src="js/footer.js?v=1.0.0"></script>
+  <script src="js/cookie-modal.js?v=1.0.0"></script>
+  <script src="js/analytics.js?v=1.0.0"></script>
+</body>
+</html>

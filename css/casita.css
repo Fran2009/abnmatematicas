@@ -1,0 +1,123 @@
+/* casita.css */
+
+/* Ajustes generales */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+h1 {
+  text-align: center;
+}
+
+/* Contenedor de la casita */
+#casitaContainer {
+  margin-top: 20px;
+  display: block;
+  text-align: center;
+}
+
+/* Tabla de la casita */
+#tablaCasita {
+  margin: 0 auto;
+  border-collapse: collapse;
+  border: 2px solid #673ab7;
+}
+
+/* Fila del tejado y encabezado */
+#casitaHead th {
+  border: 1px solid #673ab7;
+  padding: 6px;
+  background-color: #b39ddb;
+  color: #000;
+  text-align: center;
+}
+
+/* Celda del tejado: ocupa sólo las columnas de cifras */
+.roof-cell {
+  background: none;
+  position: relative;
+  text-align: center;
+}
+
+/* Triángulo del tejado que se adapta al ancho de las columnas de cifras */
+.roof {
+  width: 100%;
+  height: var(--roof-height, 40px);
+  background-color: #673ab7;
+  /* Creamos un triángulo con clip-path */
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  position: relative;
+  margin: 0 auto;
+}
+
+/* Posiciona el texto en la base del triángulo */
+.roof-text {
+  position: absolute;
+  bottom: 0; /* en la base */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Celdas del cuerpo */
+#casitaBody td {
+  border: 1px solid #673ab7;
+  padding: 8px;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* Inputs en las celdas */
+#casitaBody input {
+  width: 60px;
+  text-align: center;
+  font-size: 16px;
+  padding: 4px; /* Margen interno para que el texto no quede pegado al borde */
+  transition: background-color 0.3s, width 0.3s;
+}
+
+/* Estados de validación */
+.correcto {
+  background-color: #c8f7c5; /* Verde claro */
+}
+
+.incorrecto {
+  background-color: #f7c5c5; /* Rojo claro */
+}
+
+/* Responsivo: ajustes para pantallas pequeñas */
+@media (max-width: 600px) {
+  .container {
+    padding: 10px;
+    margin: 10px;
+  }
+  #tablaCasita th,
+  #casitaBody td {
+    padding: 4px;
+    min-width: 30px;
+  }
+  #casitaBody input {
+    width: 45px;
+    font-size: 14px;
+  }
+}
+
+

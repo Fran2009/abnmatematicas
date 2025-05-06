@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Método ABN - Rejilla de suma y resta</title>
+  <link rel="stylesheet" href="css/rejilla.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/cookie-modal.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Método ABN - Rejilla de suma y resta</h1>
+    <p>
+      La rejilla en el Método ABN es una herramienta visual que facilita la comprensión de sumas y restas al descomponer los números según sus valores posicionales (unidades, decenas, centenas, etc.). Los números se colocan en filas y columnas dentro de la rejilla, y se operan por partes, lo que permite realizar los cálculos de forma más lógica y flexible. Este enfoque ayuda a los estudiantes a visualizar el proceso y desarrollar una mayor comprensión de las operaciones.
+    </p>
+    <p>
+      Selecciona el nivel deseado, elige el tipo de operación y haz clic en "Generar ejercicio". Completa cada casilla; si las cantidades ingresadas son correctas, aparecerá una nueva línea automáticamente. Continúa así hasta alcanzar el resultado final. Ejemplo 14 + 12, pasamos una decena, por lo tanto la cantidad a descomponer es 10, luego escribimos 14, seguidamente 2 y aprecerá la siguiente línea ¡Buena suerte!
+    </p>
+    <label for="nivel">Nivel:</label>
+    <select id="nivel">
+      <option value="1">Nivel 1 (Hasta 50)</option>
+      <option value="2">Nivel 2 (Hasta 100)</option>
+      <option value="3">Nivel 3 (Hasta 500)</option>
+      <option value="4">Nivel 4 (Hasta 1000)</option>
+    </select>
+    <label for="operacion" style="margin-left:20px;">Operación:</label>
+    <select id="operacion">
+      <option value="suma">Suma</option>
+      <option value="resta">Resta</option>
+    </select>
+    <br>
+    <button onclick="iniciarEjercicio()">Generar Ejercicio</button>
+    <div class="exercise" id="ejercicio"></div>
+  </div>
+  <div id="cookie-modal-container"></div>
+
+  <script src="js/rejilla.js?v=1.0.0"></script>
+  <script src="js/navbar.js?v=1.0.0"></script>
+  <script src="js/footer.js?v=1.0.0"></script>
+  <script src="js/cookie-modal.js?v=1.0.0"></script>
+  <script src="js/analytics.js?v=1.0.0"></script>
+</body>
+</html>

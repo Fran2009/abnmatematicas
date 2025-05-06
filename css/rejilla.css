@@ -1,0 +1,84 @@
+/* rejilla.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+select, button {
+  font-size: 16px;
+  margin: 5px;
+}
+
+.exercise {
+  margin-top: 20px;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #eee;
+}
+
+input[type="number"] {
+  width: 80px;
+  padding: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.operacionSimbolo {
+  font-weight: bold;
+  margin-right: 5px;
+  font-size: 18px;
+}
+
+.correcto {
+  background-color: #c8f7c5;
+}
+
+.incorrecto {
+  background-color: #f7c5c5;
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 600px) {
+.container {
+  padding: 10px;
+  margin: 10px;
+}
+table, th, td {
+  font-size: 12px;
+  padding: 4px;
+}
+input[type="number"] {
+  width: 50px;
+  padding: 3px;
+  font-size: 12px;
+}
+}
