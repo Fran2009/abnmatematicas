@@ -69,3 +69,9 @@ footer a {
 footer a:hover {
   color: #000;
 }
+
+.intro:last-of-type {
+  font-size: 15px;
+  color: #555;
+  margin-top: 15px;
+}
