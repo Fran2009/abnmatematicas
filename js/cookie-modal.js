@@ -322,6 +322,15 @@
 
     // Ejecutar automáticamente si no se llama explícitamente a initCookieModal
     document.addEventListener('DOMContentLoaded', function () {
+
+        if (document.cookie.includes('strictCookies=enabled') ||
+            document.cookie.includes('advertisingCookies=enabled') ||
+            document.cookie.includes('performanceCookies=enabled') ||
+            document.cookie.includes('functionalityCookies=enabled')) {
+            // Ya se han guardado las preferencias: NO mostrar el modal
+            return;
+        }
+
         if (!initialized) {
             initCookieModal(); // Cargar con valores por defecto si no se ha llamado explícitamente
         }
