@@ -20,6 +20,8 @@ function iniciarEjercicio() {
     case "2": maxNumber = 100; break;
     case "3": maxNumber = 500; break;
     case "4": maxNumber = 1000; break;
+    case "5": maxNumber = 5000; break;
+    case "6": maxNumber = 10000; break;
     default: maxNumber = 20;
   }
   
