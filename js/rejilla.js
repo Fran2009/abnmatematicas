@@ -347,7 +347,7 @@ function toggleTercerNumeroPersonalizado() {
   
   if (contenedorNum3) {
     if (isTriple) {
-      contenedorNum3.style.display = 'block';
+      contenedorNum3.style.display = 'inline-block';
     } else {
       contenedorNum3.style.display = 'none';
     }
