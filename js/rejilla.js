@@ -197,3 +197,64 @@ function marcarEstado(element, estado) {
     element.classList.remove('incorrecto');
   }
 }
+
+// --- FUNCIONES PARA NÚMEROS PERSONALIZADOS ---
+function mostrarInputPersonalizadoRejilla() {
+  const container = document.getElementById('customInputContainerRejilla');
+  if (container.style.display === 'none' || container.style.display === '') {
+    container.style.display = 'block';
+  } else {
+    container.style.display = 'none';
+  }
+}
+
+function iniciarEjercicioPersonalizado() {
+  const num1Str = document.getElementById('num1Personalizado').value;
+  const num2Str = document.getElementById('num2Personalizado').value;
+  
+  const n1 = parseInt(num1Str, 10);
+  const n2 = parseInt(num2Str, 10);
+  
+  if (isNaN(n1) || isNaN(n2)) {
+    alert("Por favor, introduce dos números válidos.");
+    return;
+  }
+  
+  currentOperation = document.getElementById('operacion').value;
+  
+  // Determinar cuál es el mayor (siempre bigNumber es mayor o igual)
+  let max = Math.max(n1, n2);
+  let min = Math.min(n1, n2);
+  
+  bigNumber = max;
+  smallNumber = min;
+  
+  // Inicializar los valores previos
+  Tcalc = [bigNumber];
+  Rcalc = [smallNumber];
+  nextRowIndex = 1;
+  
+  // Construir la estructura de la tabla
+  let html = `
+    <p><strong>Ejercicio:</strong> ${bigNumber} ${currentOperation === 'suma' ? '+' : '-'} ${smallNumber}</p>
+    <table id="abnTable">
+      <thead>
+        <tr>
+          <th>Cantidad a descomponer</th>
+          <th id="thBigNumber">${bigNumber}</th>
+          <th id="thSmallNumber">${smallNumber}</th>
+        </tr>
+      </thead>
+      <tbody id="tablaBody">
+      </tbody>
+    </table>
+    <p id="mensajeFinal"></p>
+  `;
+  document.getElementById('ejercicio').innerHTML = html;
+  
+  // Agregar la primera fila
+  agregarFila();
+  
+  // Ocultar el contenedor después de generar
+  document.getElementById('customInputContainerRejilla').style.display = 'none';
+}

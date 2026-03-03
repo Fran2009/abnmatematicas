@@ -284,3 +284,41 @@ function marcarEstado(element, estado) {
     element.classList.remove('incorrecto');
   }
 }
+
+// --- FUNCIONES PARA NÚMERO PERSONALIZADO ---
+function mostrarInputPersonalizado() {
+  const container = document.getElementById('customInputContainer');
+  if (container.style.display === 'none' || container.style.display === '') {
+    container.style.display = 'block';
+  } else {
+    container.style.display = 'none';
+  }
+}
+
+function generarNumeroPersonalizado() {
+  const inputEl = document.getElementById('numeroPersonalizado');
+  const numStr = inputEl.value;
+  const num = parseInt(numStr, 10);
+  
+  if (isNaN(num) || num < 10) {
+    alert("Por favor, introduce un número válido mayor o igual a 10.");
+    return;
+  }
+  
+  numeroTejado = num;
+  
+  // Determinar el nivel según la longitud del número
+  let nivelCalculado = 1;
+  const len = numStr.length;
+  if (len === 2) nivelCalculado = 1;
+  else if (len === 3) nivelCalculado = 2;
+  else if (len === 4) nivelCalculado = 3;
+  else if (len === 5) nivelCalculado = 4;
+  else if (len >= 6) nivelCalculado = 5;
+  
+  construirTablaCasita(nivelCalculado, numeroTejado);
+  document.getElementById('casitaContainer').style.display = 'block';
+  
+  // Ocultar el input personalizado después de generar
+  document.getElementById('customInputContainer').style.display = 'none';
+}
