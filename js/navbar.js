@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <li><a href="numeracion.html">Numeración y Conteo</a></li>
         <li><a href="casita.html">Casita de Descomposición</a></li>
         <li><a href="rejilla.html">Rejilla</a></li>
+        <li><a href="multiplicaciones.html">Multiplicaciones</a></li>
         <li><a href="videos.html">Vídeos de Ejemplos</a></li>
       </ul>
     </div>

@@ -11,6 +11,7 @@ El método ABN es una forma alternativa de enseñar matemáticas basada en la de
 - **Numeración y Conteo:** Juegos y ejercicios para trabajar la estructura numérica.
 - **Casita de Descomposición:** Actividad visual para descomponer números en sumandos.
 - **Rejilla:** Técnica para realizar operaciones con estructuras abiertas.
+- **Multiplicaciones:** Práctica configurable de tablas de multiplicar sin repetición y validación interactiva.
 - **Vídeos de Ejemplos:** Enlaces a recursos audiovisuales para aprender el método paso a paso.
 
 ## 🌐 Estructura del Proyecto
@@ -20,6 +21,7 @@ El método ABN es una forma alternativa de enseñar matemáticas basada en la de
 │ ├── cookie-modal.css # Estilos de la librería de cookies
 │ ├── footer.css # Estilos del pie de página
 │ ├── index.css # Estilos de la página principal
+│ ├── multiplicaciones.css # Estilos de la práctica de multiplicaciones
 │ ├── navbar.css # Estilos de la barra de navegación
 │ ├── numeracion.css # Estilos de la página de numeración y conteo
 │ ├── rejilla.css # Estilos de la sumas y restas por rejilla
@@ -29,11 +31,13 @@ El método ABN es una forma alternativa de enseñar matemáticas basada en la de
 │ ├── casita.js # Lógica de la casita de descomposición
 │ ├── cookie-modal.js # Toda la lógica para la gestión de cookies
 │ ├── footer.js # Pie de página con autor e icono de GitHub
+│ ├── multiplicaciones.js # Lógica de la práctica de multiplicaciones
 │ ├── navbar.js # Menú de navegación insertado dinámicamente
 │ ├── numeracion.js # Lógica de la página numeración y conteo
 │ └── rejilla.js # Lógica de la suma y resta por rejilla
 ├─ casita.html # Casita de descomposición
 ├─ index.html # Página principal con enlaces a las secciones
+├─ multiplicaciones.html # Práctica de multiplicaciones
 ├─ numeracion.html # Actividades de numeración
 ├─ rejilla.html # Método de la rejilla
 └─ videos.html # Galería de vídeos educativos

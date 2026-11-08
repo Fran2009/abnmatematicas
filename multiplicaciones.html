@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método ABN - Tablas de Multiplicar</title>
+  <link rel="stylesheet" href="css/multiplicaciones.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/cookie-modal.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Método ABN - Práctica de Multiplicaciones</h1>
+
+    <p class="intro">
+      En el método ABN, la comprensión y dominio de las tablas de multiplicar es clave para desarrollar un cálculo mental rápido y flexible. Esta herramienta te permite practicar operaciones de forma progresiva e interactiva.
+    </p>
+    <p class="intro">
+      Selecciona desde qué tabla y hasta qué tabla deseas repasar (por ejemplo, del 2 al 12). Al pulsar en <strong>"Comenzar"</strong> se generarán multiplicaciones de forma aleatoria sin repetir ninguna combinación. Escribe la respuesta en cada casilla: si es correcta se marcará en <strong style="color: #2e7d32;">verde</strong> y aparecerá la siguiente multiplicación debajo; si es incorrecta se marcará en <strong style="color: #c62828;">rojo</strong> para que puedas rectificarla. ¡Completa todas las multiplicaciones para ganar!
+    </p>
+
+    <!-- Panel de configuración del rango -->
+    <div class="config-panel">
+      <h2><i class="fas fa-sliders"></i> Configuración de las Tablas</h2>
+      <div class="config-grid">
+        <div class="config-item">
+          <label for="tablaDesde">Desde la tabla del:</label>
+          <input type="number" id="tablaDesde" value="2" min="1" max="50">
+        </div>
+
+        <div class="config-item">
+          <label for="tablaHasta">Hasta la tabla del:</label>
+          <input type="number" id="tablaHasta" value="12" min="1" max="50">
+        </div>
+
+        <div class="config-item">
+          <label for="multiplicarHasta">Multiplicar hasta el:</label>
+          <input type="number" id="multiplicarHasta" value="12" min="1" max="50">
+        </div>
+      </div>
+
+      <div class="config-actions">
+        <button id="btnComenzar" class="btn btn-primary">
+          <i class="fas fa-play"></i> Comenzar
+        </button>
+        <button id="btnReiniciar" class="btn btn-secondary">
+          <i class="fas fa-rotate-right"></i> Reiniciar
+        </button>
+      </div>
+    </div>
+
+    <!-- Barra de progreso -->
+    <div id="progressSection" class="progress-section">
+      <div class="progress-header">
+        <span>Progreso</span>
+        <span id="progresoTexto">Aciertos: 0 de 0</span>
+      </div>
+      <div class="progress-bar-container">
+        <div id="progressBarFill" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Zona de ejercicios dinámica -->
+    <div id="zonaPractica">
+      <div id="ejerciciosContainer" class="ejercicios-container">
+        <!-- Las filas de multiplicaciones se insertarán dinámicamente aquí -->
+      </div>
+    </div>
+
+    <!-- Mensaje final de enhorabuena -->
+    <div id="mensajeFinal" class="mensaje-final">
+      <div class="trofeo">
+        <i class="fas fa-trophy"></i>
+      </div>
+      <h2>¡Enhorabuena!</h2>
+      <p>Has puesto correctamente todas las multiplicaciones.</p>
+      <button id="btnReiniciarFinal" class="btn btn-primary">
+        <i class="fas fa-rotate-right"></i> Practicar de nuevo
+      </button>
+    </div>
+
+  </div>
+
+  <div id="cookie-modal-container"></div>
+
+  <script src="js/multiplicaciones.js?v=1.0.0"></script>
+  <script src="js/navbar.js?v=1.0.4"></script>
+  <script src="js/footer.js?v=1.0.3"></script>
+  <script src="js/cookie-modal.js?v=1.0.3"></script>
+  <script src="js/analytics.js?v=1.0.3"></script>
+
+</body>
+</html>
+
