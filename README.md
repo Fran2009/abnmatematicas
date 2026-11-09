@@ -10,45 +10,47 @@ El método ABN es una forma alternativa de enseñar matemáticas basada en la de
 
 - **Numeración y Conteo:** Juegos y ejercicios sobre la tabla del 100 para trabajar la estructura numérica con sumas y restas.
 - **Casita de Descomposición:** Actividad visual para descomponer números en órdenes de magnitud y sumandos.
-- **Los Soles ABN:** Descomposición y cálculo flexible iluminando los 8 rayos alrededor del número central del sol (con **Modo Guiado** para completar huecos y **Modo Libre** para inventar operaciones propias).
+- **Los Soles ABN:** Descomposición y cálculo flexible iluminando los rayos alrededor del número central del sol (por defecto 10 rayos, configurable a más o menos, con **Modo Guiado** para completar huecos y **Modo Libre** para inventar operaciones propias).
 - **La Rejilla ABN:** Herramienta interactiva guiada paso a paso con ejemplos visuales resueltos, cabeceras descriptivas y pistas en vivo para practicar:
   - **Operaciones Básicas:** Suma y Resta por detracción.
   - **Comparación, Escaleras e Igualación ABN:** Escalera Ascendente, Escalera Descendente, Igualación y Detracción con Comparación.
   - **Operaciones de 3 Números:** Doble Suma, Doble Resta y Sumirresta.
-- **Multiplicaciones:** Práctica configurable de tablas de multiplicar sin repetición y validación interactiva.
+- **Multiplicaciones:** Práctica configurable de tablas de multiplicar (todas las combinaciones sin repetición o un número determinado de preguntas) con cronómetro, aciertos y fallos interactivos.
 - **Vídeos de Ejemplos:** Enlaces a recursos audiovisuales para aprender el método paso a paso.
 
 ## 🌐 Estructura del Proyecto
 
-📁 css/
-│ ├── casita.css # Estilos de la casita de descomposición
-│ ├── cookie-modal.css # Estilos de la librería de cookies
-│ ├── footer.css # Estilos del pie de página
-│ ├── index.css # Estilos de la página principal con tarjetas interactivas
-│ ├── multiplicaciones.css # Estilos de la práctica de multiplicaciones
-│ ├── navbar.css # Estilos de la barra de navegación adaptable
-│ ├── numeracion.css # Estilos de la página de numeración y conteo
-│ ├── rejilla.css # Estilos de la rejilla ABN y selector visual de operaciones
-│ ├── soles.css # Estilos de la actividad de Los Soles ABN
-│ ├── theme.css # Sistema de diseño global (tipografía infantil, colores y componentes)
-│ ├── video.css # Estilos de la galería de vídeos
-📁 js/
-│ ├── analytics.js # Scripts para el funcionamiento de Google Analytics
-│ ├── casita.js # Lógica de la casita de descomposición
-│ ├── cookie-modal.js # Toda la lógica para la gestión de cookies
-│ ├── footer.js # Pie de página con autor e icono de GitHub
-│ ├── multiplicaciones.js # Lógica de la práctica de multiplicaciones
-│ ├── navbar.js # Menú de navegación insertado dinámicamente
-│ ├── numeracion.js # Lógica de la página numeración y conteo
-│ ├── rejilla.js # Lógica de sumas, restas, escaleras, igualación, comparación y triples en rejilla
-│ └── soles.js # Lógica de Los Soles ABN (modo guiado y modo libre)
-├─ casita.html # Casita de descomposición
-├─ index.html # Página principal con tarjetas de acceso a las secciones
-├─ multiplicaciones.html # Práctica de multiplicaciones
-├─ numeracion.html # Actividades de numeración
-├─ rejilla.html # Método de la rejilla ABN
-├─ soles.html # Actividad de Los Soles ABN
-└─ videos.html # Galería de vídeos educativos
+```text
+├── css/
+│   ├── casita.css              # Estilos de la casita de descomposición
+│   ├── cookie-modal.css        # Estilos de la librería de cookies
+│   ├── footer.css              # Estilos del pie de página
+│   ├── index.css               # Estilos de la página principal con tarjetas interactivas
+│   ├── multiplicaciones.css    # Estilos de la práctica de multiplicaciones
+│   ├── navbar.css              # Estilos de la barra de navegación adaptable
+│   ├── numeracion.css          # Estilos de la página de numeración y conteo
+│   ├── rejilla.css             # Estilos de la rejilla ABN y selector visual de operaciones
+│   ├── soles.css               # Estilos de la actividad de Los Soles ABN
+│   ├── theme.css               # Sistema de diseño global (tipografía infantil, colores y componentes)
+│   └── video.css               # Estilos de la galería de vídeos
+├── js/
+│   ├── analytics.js            # Scripts para el funcionamiento de Google Analytics
+│   ├── casita.js               # Lógica de la casita de descomposición
+│   ├── cookie-modal.js         # Toda la lógica para la gestión de cookies
+│   ├── footer.js               # Pie de página con autor e icono de GitHub
+│   ├── multiplicaciones.js     # Lógica de la práctica de multiplicaciones
+│   ├── navbar.js               # Menú de navegación insertado dinámicamente
+│   ├── numeracion.js           # Lógica de la página numeración y conteo
+│   ├── rejilla.js              # Lógica de sumas, restas, escaleras, igualación, comparación y triples en rejilla
+│   └── soles.js                # Lógica de Los Soles ABN (modo guiado y modo libre)
+├── casita.html                 # Casita de descomposición
+├── index.html                  # Página principal con tarjetas de acceso a las secciones
+├── multiplicaciones.html       # Práctica de multiplicaciones
+├── numeracion.html             # Actividades de numeración
+├── rejilla.html                # Método de la rejilla ABN
+├── soles.html                  # Actividad de Los Soles ABN
+└── videos.html                 # Galería de vídeos educativos
+```
 
 ## 🔧 Tecnologías utilizadas
 
