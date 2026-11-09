@@ -261,6 +261,10 @@
             performanceCookies ? setCookie('performanceCookies', 'enabled', 30) : deleteCookie('performanceCookies');
             advertisingCookies ? setCookie('advertisingCookies', 'enabled', 30) : deleteCookie('advertisingCookies');
 
+            if (performanceCookies && typeof window.loadGoogleAnalytics === 'function') {
+                window.loadGoogleAnalytics();
+            }
+
             // Ocultar el modal
             document.querySelector('.cookie-preferences-modal').style.display = 'none';
         });
@@ -271,6 +275,10 @@
             setCookie('functionalityCookies', 'enabled', 30);
             setCookie('performanceCookies', 'enabled', 30);
             setCookie('advertisingCookies', 'enabled', 30);
+
+            if (typeof window.loadGoogleAnalytics === 'function') {
+                window.loadGoogleAnalytics();
+            }
 
             // Ocultar el modal después de aceptar todas
             document.querySelector('.cookie-preferences-modal').style.display = 'none';
@@ -302,6 +310,9 @@
                 deleteCookie('functionalityCookies');
                 deleteCookie('performanceCookies');
                 deleteCookie('advertisingCookies');
+                if (typeof updateAnalyticsConsent === 'function') {
+                    updateAnalyticsConsent();
+                }
                 closeRejectCookiesModal();
                 document.querySelector('.cookie-preferences-modal').style.display = 'none'; // Cerrar el modal principal
             });
