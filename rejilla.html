@@ -211,6 +211,25 @@
       </div>
     </div>
 
+    <!-- Barra de estadísticas: Tiempo, Aciertos y Errores de la Rejilla -->
+    <div id="statsSectionRejilla" class="stats-bar" style="display: none;">
+      <div class="stat-badge stat-time">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span class="stat-label">Tiempo</span>
+        <span class="stat-value" id="cronometroTiempoRejilla">00:00</span>
+      </div>
+      <div class="stat-badge stat-hits">
+        <i class="fa-solid fa-circle-check"></i>
+        <span class="stat-label">Aciertos</span>
+        <span class="stat-value" id="contadorAciertosRejilla">0</span>
+      </div>
+      <div class="stat-badge stat-errors">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <span class="stat-label">Errores</span>
+        <span class="stat-value" id="contadorErroresRejilla">0</span>
+      </div>
+    </div>
+
     <!-- Zona del ejercicio activo -->
     <div class="exercise" id="ejercicio">
       <div class="empty-state">

@@ -43,6 +43,33 @@
           <label for="multiplicarHasta">Multiplicar hasta el:</label>
           <input type="number" id="multiplicarHasta" value="12" min="1" max="50">
         </div>
+
+        <div class="config-item">
+          <label for="tipoCantidad">Preguntas:</label>
+          <select id="tipoCantidad" class="config-select">
+            <option value="todas">Todas las combinaciones</option>
+            <option value="10">10 ejercicios</option>
+            <option value="20">20 ejercicios</option>
+            <option value="50">50 ejercicios</option>
+            <option value="custom">Elegir cantidad...</option>
+          </select>
+          <input
+            type="number"
+            id="cantidadPersonalizada"
+            value="10"
+            min="1"
+            max="500"
+            style="display: none; width: 75px;"
+            placeholder="Cant."
+            aria-label="Cantidad de ejercicios personalizada"
+          />
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <span id="infoCombinaciones" class="info-combinaciones">
+          <i class="fa-solid fa-circle-info"></i> Calculando combinaciones...
+        </span>
       </div>
 
       <div class="config-actions">
@@ -52,6 +79,25 @@
         <button id="btnReiniciar" class="btn btn-secondary">
           <i class="fas fa-rotate-right"></i> Reiniciar
         </button>
+      </div>
+    </div>
+
+    <!-- Barra de estadísticas: Tiempo, Aciertos y Errores -->
+    <div id="statsSection" class="stats-bar" style="display: none;">
+      <div class="stat-badge stat-time">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span class="stat-label">Tiempo</span>
+        <span class="stat-value" id="cronometroTiempo">00:00</span>
+      </div>
+      <div class="stat-badge stat-hits">
+        <i class="fa-solid fa-circle-check"></i>
+        <span class="stat-label">Aciertos</span>
+        <span class="stat-value" id="contadorAciertos">0</span>
+      </div>
+      <div class="stat-badge stat-errors">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <span class="stat-label">Errores</span>
+        <span class="stat-value" id="contadorErrores">0</span>
       </div>
     </div>
 
@@ -87,7 +133,7 @@
 
   <div id="cookie-modal-container"></div>
 
-  <script src="js/multiplicaciones.js?v=1.0.0"></script>
+  <script src="js/multiplicaciones.js?v=1.0.3"></script>
   <script src="js/navbar.js?v=1.0.5"></script>
   <script src="js/footer.js?v=1.0.4"></script>
   <script src="js/cookie-modal.js?v=1.0.3"></script>

@@ -54,6 +54,25 @@
       </button>
     </div>
 
+    <!-- Barra de estadísticas: Tiempo, Aciertos y Errores de la Casita -->
+    <div id="statsSectionCasita" class="stats-bar" style="display: none;">
+      <div class="stat-badge stat-time">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span class="stat-label">Tiempo</span>
+        <span class="stat-value" id="cronometroTiempoCasita">00:00</span>
+      </div>
+      <div class="stat-badge stat-hits">
+        <i class="fa-solid fa-circle-check"></i>
+        <span class="stat-label">Aciertos</span>
+        <span class="stat-value" id="contadorAciertosCasita">0</span>
+      </div>
+      <div class="stat-badge stat-errors">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <span class="stat-label">Errores</span>
+        <span class="stat-value" id="contadorErroresCasita">0</span>
+      </div>
+    </div>
+
     <!-- Contenedor de la casita -->
     <div id="casitaContainer" style="display: none;">
       <div class="casita-scroll-wrap">
@@ -63,10 +82,21 @@
         </table>
       </div>
     </div>
+
+    <!-- Mensaje final cuando la Casita está completada -->
+    <div id="casitaMensajeFinal" class="casita-mensaje-final" style="display: none;">
+      <div class="casita-trophy">🏠🎉✨</div>
+      <h2>¡Enhorabuena! ¡Has completado la Casita de Descomposición!</h2>
+      <p id="casitaResumenFinal">Has descubierto todas las formas de descomponer el número.</p>
+      <div id="casitaStatsResumen" class="casita-stats-resumen"></div>
+      <button type="button" class="btn" onclick="generarNumero()">
+        <i class="fa-solid fa-rotate-right"></i> Jugar con otra Casita
+      </button>
+    </div>
   </div>
 
   <div id="cookie-modal-container"></div>
-  <script src="js/casita.js?v=1.0.4"></script>
+  <script src="js/casita.js?v=1.0.5"></script>
   <script src="js/navbar.js?v=1.0.5"></script>
   <script src="js/footer.js?v=1.0.4"></script>
   <script src="js/cookie-modal.js?v=1.0.3"></script>

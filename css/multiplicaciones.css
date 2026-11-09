@@ -66,6 +66,35 @@
   box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.2);
 }
 
+.config-item select.config-select {
+  padding: 8px 12px;
+  font-size: 15px;
+  font-weight: bold;
+  border: 1px solid #b39ddb;
+  border-radius: 6px;
+  outline: none;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.config-item select.config-select:focus {
+  border-color: #673ab7;
+  box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.2);
+}
+
+.info-combinaciones {
+  display: inline-block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #4527a0;
+  background: #f3f0ff;
+  border: 1px solid #d1c4e9;
+  border-radius: 20px;
+  padding: 6px 14px;
+}
+
 .config-actions {
   margin-top: 18px;
   display: flex;

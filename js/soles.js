@@ -1,13 +1,87 @@
 // js/soles.js - Lógica interactiva de Los Soles ABN (Modo Guiado y Modo Libre)
 
-const TOTAL_RAYS = 8;
+let totalRayosSol = 10; // Por defecto 10 rayos u opciones
 let modoActualSol = "guiado"; // 'guiado' o 'libre'
 let numeroCentroSol = 20;
 let rayosData = [];
 let rayosCompletados = 0;
 let expresionesUsadasLibre = new Set();
 
+// Lee y valida la cantidad de rayos configurada en el input
+function obtenerCantidadRayos() {
+  const input = document.getElementById("cantidadRayosSol");
+  if (!input) return totalRayosSol || 10;
+  let val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 2) val = 2;
+  if (val > 30) val = 30;
+  totalRayosSol = val;
+  input.value = val;
+  return totalRayosSol;
+}
+
+// Variables de estadísticas y cronómetro (por cada Sol)
+let cronometroSolInterval = null;
+let tiempoSegundosSol = 0;
+let aciertosSol = 0;
+let erroresSol = 0;
+let rayosConFallo = new Set();
+
+function formatearTiempoSol(segundos) {
+  const mins = Math.floor(segundos / 60);
+  const secs = segundos % 60;
+  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
+
+function actualizarStatsSol() {
+  const statsSec = document.getElementById("statsSectionSol");
+  if (statsSec) statsSec.style.display = "flex";
+
+  const tiempoEl = document.getElementById("cronometroTiempoSol");
+  const aciertosEl = document.getElementById("contadorAciertosSol");
+  const erroresEl = document.getElementById("contadorErroresSol");
+
+  if (tiempoEl) tiempoEl.textContent = formatearTiempoSol(tiempoSegundosSol);
+  if (aciertosEl) aciertosEl.textContent = aciertosSol;
+  if (erroresEl) erroresEl.textContent = erroresSol;
+}
+
+function iniciarCronometroSol() {
+  if (cronometroSolInterval) {
+    clearInterval(cronometroSolInterval);
+  }
+  tiempoSegundosSol = 0;
+  aciertosSol = 0;
+  erroresSol = 0;
+  rayosConFallo.clear();
+
+  const statsSec = document.getElementById("statsSectionSol");
+  if (statsSec) statsSec.style.display = "flex";
+
+  actualizarStatsSol();
+
+  cronometroSolInterval = setInterval(() => {
+    tiempoSegundosSol++;
+    const tiempoEl = document.getElementById("cronometroTiempoSol");
+    if (tiempoEl) {
+      tiempoEl.textContent = formatearTiempoSol(tiempoSegundosSol);
+    }
+  }, 1000);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  const inputRayos = document.getElementById("cantidadRayosSol");
+  if (inputRayos) {
+    inputRayos.addEventListener("change", () => {
+      obtenerCantidadRayos();
+      construirSol(numeroCentroSol);
+    });
+    inputRayos.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        obtenerCantidadRayos();
+        construirSol(numeroCentroSol);
+      }
+    });
+  }
   generarSolAleatorio();
 });
 
@@ -82,8 +156,9 @@ function generarSolPersonalizado() {
   construirSol(numeroCentroSol);
 }
 
-// Construye los 8 rayos del sol según el modo activo
+// Construye los rayos del sol según el modo activo y la cantidad configurada
 function construirSol(target) {
+  totalRayosSol = obtenerCantidadRayos();
   rayosCompletados = 0;
   expresionesUsadasLibre.clear();
   rayosData = [];
@@ -100,13 +175,13 @@ function construirSol(target) {
     tipEl.innerHTML =
       modoActualSol === "guiado"
         ? `<i class="fa-solid fa-circle-info"></i> Escribe en cada casilla el número que falta para que la operación dé <strong>${target}</strong>.`
-        : `<i class="fa-solid fa-wand-magic-sparkles"></i> Escribe 8 operaciones distintas (ej: <strong>${Math.max(1, target - 3)}+3</strong>, <strong>${target + 5}-5</strong>) que den <strong>${target}</strong>.`;
+        : `<i class="fa-solid fa-wand-magic-sparkles"></i> Escribe <strong>${totalRayosSol}</strong> operaciones distintas (ej: <strong>${Math.max(1, target - 3)}+3</strong>, <strong>${target + 5}-5</strong>) que den <strong>${target}</strong>.`;
   }
 
   if (modoActualSol === "guiado") {
-    rayosData = generarPromptsGuiados(target, TOTAL_RAYS);
+    rayosData = generarPromptsGuiados(target, totalRayosSol);
   } else {
-    for (let i = 0; i < TOTAL_RAYS; i++) {
+    for (let i = 0; i < totalRayosSol; i++) {
       rayosData.push({
         index: i,
         solved: false
@@ -116,48 +191,52 @@ function construirSol(target) {
 
   renderizarRayos();
   actualizarProgresoSol();
+  iniciarCronometroSol();
 }
 
-// Genera 8 retos guiados variados (sumas, restas, sumas dobles) cuyo resultado es `target`
+// Genera retos guiados variados (sumas, restas, sumas dobles) cuyo resultado es `target`
 function generarPromptsGuiados(target, cantidad) {
   const prompts = [];
   const usados = new Set();
 
-  // Plantillas variadas ABN
   for (let i = 0; i < cantidad; i++) {
     let promptObj = null;
     let intentos = 0;
 
-    while (!promptObj && intentos < 40) {
+    while (!promptObj && intentos < 80) {
       intentos++;
-      const tipo = i % 4; // 0: a + [?], 1: [?] + b, 2: c - [?], 3: a + b + [?]
+      const tipo = (i + intentos) % 4; // 0: a + [?], 1: [?] + b, 2: c - [?], 3: a + b + [?]
 
       if (tipo === 0) {
-        const a = Math.floor(Math.random() * (target - 1)) + 1;
-        const ans = target - a;
-        const key = `add1_${a}`;
-        if (!usados.has(key)) {
-          usados.add(key);
-          promptObj = {
-            prefix: `${a} +`,
-            suffix: "",
-            expected: ans
-          };
+        if (target > 1) {
+          const a = Math.floor(Math.random() * (target - 1)) + 1;
+          const ans = target - a;
+          const key = `add1_${a}`;
+          if (!usados.has(key)) {
+            usados.add(key);
+            promptObj = {
+              prefix: `${a} +`,
+              suffix: "",
+              expected: ans
+            };
+          }
         }
       } else if (tipo === 1) {
-        const b = Math.floor(Math.random() * (target - 1)) + 1;
-        const ans = target - b;
-        const key = `add2_${b}`;
-        if (!usados.has(key)) {
-          usados.add(key);
-          promptObj = {
-            prefix: "",
-            suffix: `+ ${b}`,
-            expected: ans
-          };
+        if (target > 1) {
+          const b = Math.floor(Math.random() * (target - 1)) + 1;
+          const ans = target - b;
+          const key = `add2_${b}`;
+          if (!usados.has(key)) {
+            usados.add(key);
+            promptObj = {
+              prefix: "",
+              suffix: `+ ${b}`,
+              expected: ans
+            };
+          }
         }
       } else if (tipo === 2) {
-        const extra = Math.floor(Math.random() * Math.max(5, Math.min(30, target))) + 1;
+        const extra = Math.floor(Math.random() * Math.max(5, Math.min(30, target))) + intentos;
         const c = target + extra;
         const key = `sub_${c}`;
         if (!usados.has(key)) {
@@ -170,7 +249,7 @@ function generarPromptsGuiados(target, cantidad) {
         }
       } else {
         if (target >= 4) {
-          const a = Math.max(1, Math.floor(target / 2));
+          const a = Math.max(1, Math.floor(target / 3));
           const b = Math.floor(Math.random() * (target - a - 1)) + 1;
           const ans = target - a - b;
           const key = `triple_${a}_${b}`;
@@ -186,13 +265,13 @@ function generarPromptsGuiados(target, cantidad) {
       }
     }
 
-    // Fallback garantizado si target es muy pequeño
+    // Fallback garantizado y siempre único (mediante resta)
     if (!promptObj) {
-      const a = (i % (target - 1)) + 1;
+      const extra = i + 1;
       promptObj = {
-        prefix: `${a} +`,
+        prefix: `${target + extra} -`,
         suffix: "",
-        expected: target - a
+        expected: extra
       };
     }
 
@@ -206,12 +285,14 @@ function generarPromptsGuiados(target, cantidad) {
   return prompts;
 }
 
-// Renderiza los 8 rayos alrededor del sol (4 a la izquierda y 4 a la derecha)
+// Renderiza los rayos alrededor del sol (distribuidos entre izquierda y derecha)
 function renderizarRayos() {
   const leftContainer = document.getElementById("raysLeft");
   const rightContainer = document.getElementById("raysRight");
   leftContainer.innerHTML = "";
   rightContainer.innerHTML = "";
+
+  const mitad = Math.ceil(totalRayosSol / 2);
 
   rayosData.forEach((rayo, idx) => {
     const rayCard = document.createElement("div");
@@ -255,7 +336,7 @@ function renderizarRayos() {
       `;
     }
 
-    if (idx < 4) {
+    if (idx < mitad) {
       leftContainer.appendChild(rayCard);
     } else {
       rightContainer.appendChild(rayCard);
@@ -263,7 +344,17 @@ function renderizarRayos() {
 
     const inputEl = rayCard.querySelector("input");
     if (modoActualSol === "guiado") {
-      inputEl.addEventListener("input", () => validarRayoGuiado(idx));
+      inputEl.addEventListener("input", () => validarRayoGuiado(idx, false));
+      inputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          validarRayoGuiado(idx, true);
+        }
+      });
+      inputEl.addEventListener("blur", () => {
+        if (inputEl.value.trim() !== "" && !inputEl.disabled) {
+          validarRayoGuiado(idx, true);
+        }
+      });
     } else {
       inputEl.addEventListener("input", () => validarRayoLibre(idx, false));
       inputEl.addEventListener("keydown", (e) => {
@@ -286,7 +377,7 @@ function renderizarRayos() {
 }
 
 // Valida un rayo en Modo Guiado
-function validarRayoGuiado(idx) {
+function validarRayoGuiado(idx, forzar = false) {
   const rayo = rayosData[idx];
   const inputEl = document.getElementById(`ray_input_${idx}`);
   const statusEl = document.getElementById(`ray_status_${idx}`);
@@ -304,15 +395,22 @@ function validarRayoGuiado(idx) {
   if (valNum === rayo.expected) {
     marcarRayoCompletado(idx, inputEl, statusEl, cardEl);
   } else {
-    // Comprobar si es prefijo válido de la respuesta correcta
+    // Si aún no ha completado las cifras que requiere la solución y no se ha forzado comprobación
     const expStr = String(rayo.expected);
-    if (expStr.startsWith(valStr) && valStr.length < expStr.length) {
+    const faltanCifras = valStr.length < expStr.length;
+
+    if (!forzar && faltanCifras) {
       inputEl.classList.remove("correcto", "incorrecto");
       statusEl.innerHTML = "";
     } else {
       inputEl.classList.add("incorrecto");
       inputEl.classList.remove("correcto");
       statusEl.innerHTML = `<i class="fa-solid fa-xmark" style="color:#c62828;"></i>`;
+      if (!rayosConFallo.has(idx)) {
+        erroresSol++;
+        rayosConFallo.add(idx);
+        actualizarStatsSol();
+      }
     }
   }
 }
@@ -393,6 +491,11 @@ function validarRayoLibre(idx, forzarFeedback) {
       if (tipEl) {
         tipEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color:#ef6c00;"></i> ¡Ya has usado <strong>${evalRes.normalized}</strong> en otro rayo! Inventa otra combinación distinta.`;
       }
+      if (!rayosConFallo.has(idx)) {
+        erroresSol++;
+        rayosConFallo.add(idx);
+        actualizarStatsSol();
+      }
       return;
     }
 
@@ -405,6 +508,11 @@ function validarRayoLibre(idx, forzarFeedback) {
     inputEl.classList.add("incorrecto");
     inputEl.classList.remove("correcto");
     statusEl.innerHTML = `<i class="fa-solid fa-xmark" style="color:#c62828;"></i>`;
+    if (!rayosConFallo.has(idx)) {
+      erroresSol++;
+      rayosConFallo.add(idx);
+      actualizarStatsSol();
+    }
     if (tipEl) {
       if (!evalRes.validSyntax) {
         tipEl.innerHTML = `<i class="fa-solid fa-circle-exclamation" style="color:#c62828;"></i> Escribe una operación como <strong>${Math.max(1, numeroCentroSol - 2)}+2</strong> o <strong>${numeroCentroSol + 5}-5</strong>.`;
@@ -422,6 +530,9 @@ function validarRayoLibre(idx, forzarFeedback) {
 function marcarRayoCompletado(idx, inputEl, statusEl, cardEl) {
   rayosData[idx].solved = true;
   rayosCompletados++;
+  aciertosSol++;
+  rayosConFallo.delete(idx);
+  actualizarStatsSol();
 
   inputEl.classList.remove("incorrecto");
   inputEl.classList.add("correcto");
@@ -432,9 +543,9 @@ function marcarRayoCompletado(idx, inputEl, statusEl, cardEl) {
   actualizarProgresoSol();
 
   // Si aún quedan rayos por resolver, enfocar el siguiente disponible
-  if (rayosCompletados < TOTAL_RAYS) {
-    for (let step = 1; step <= TOTAL_RAYS; step++) {
-      const nextIdx = (idx + step) % TOTAL_RAYS;
+  if (rayosCompletados < totalRayosSol) {
+    for (let step = 1; step <= totalRayosSol; step++) {
+      const nextIdx = (idx + step) % totalRayosSol;
       if (!rayosData[nextIdx].solved) {
         setTimeout(() => {
           document.getElementById(`ray_input_${nextIdx}`)?.focus();
@@ -444,12 +555,16 @@ function marcarRayoCompletado(idx, inputEl, statusEl, cardEl) {
     }
   } else {
     // ¡Todos los rayos iluminados!
+    if (cronometroSolInterval) {
+      clearInterval(cronometroSolInterval);
+      cronometroSolInterval = null;
+    }
     document.getElementById("sunFace").textContent = "😎";
     document.getElementById("sunCore").classList.add("sun-complete");
     const finalEl = document.getElementById("solMensajeFinal");
     const resEl = document.getElementById("solResumenFinal");
     if (resEl) {
-      resEl.innerHTML = `¡Fantástico! Has encendido los <strong>8 rayos</strong> del Sol del número <strong>${numeroCentroSol}</strong>.`;
+      resEl.innerHTML = `¡Fantástico! Has encendido los <strong>${totalRayosSol} rayos</strong> del Sol del número <strong>${numeroCentroSol}</strong> en <strong>${formatearTiempoSol(tiempoSegundosSol)}</strong> con <strong>${erroresSol} fallo(s)</strong>.`;
     }
     if (finalEl) {
       finalEl.style.display = "block";
@@ -465,16 +580,17 @@ function actualizarProgresoSol() {
   const faceEl = document.getElementById("sunFace");
 
   if (txtEl) {
-    txtEl.textContent = `${rayosCompletados} de ${TOTAL_RAYS}`;
+    txtEl.textContent = `${rayosCompletados} de ${totalRayosSol}`;
   }
   if (fillEl) {
-    const pct = Math.round((rayosCompletados / TOTAL_RAYS) * 100);
+    const pct = Math.round((rayosCompletados / totalRayosSol) * 100);
     fillEl.style.width = `${pct}%`;
   }
-  if (faceEl && rayosCompletados < TOTAL_RAYS) {
-    if (rayosCompletados === 0) faceEl.textContent = "😊";
-    else if (rayosCompletados < 4) faceEl.textContent = "😄";
-    else if (rayosCompletados < 7) faceEl.textContent = "🤩";
+  if (faceEl && rayosCompletados < totalRayosSol) {
+    const ratio = rayosCompletados / totalRayosSol;
+    if (ratio === 0) faceEl.textContent = "😊";
+    else if (ratio < 0.4) faceEl.textContent = "😄";
+    else if (ratio < 0.8) faceEl.textContent = "🤩";
     else faceEl.textContent = "🥳";
   }
 }

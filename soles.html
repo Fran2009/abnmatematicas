@@ -44,7 +44,7 @@
     <div class="sol-controls">
       <div class="sol-control-item">
         <label for="nivelSol"><i class="fa-solid fa-layer-group"></i> Nivel:</label>
-        <select id="nivelSol">
+        <select id="nivelSol" onchange="generarSolAleatorio()">
           <option value="1">Nivel 1 · Sol hasta 10</option>
           <option value="2" selected>Nivel 2 · Sol hasta 20</option>
           <option value="3">Nivel 3 · Sol hasta 50</option>
@@ -52,6 +52,18 @@
           <option value="5">Nivel 5 · Sol hasta 500</option>
           <option value="6">Nivel 6 · Sol hasta 1.000</option>
         </select>
+      </div>
+
+      <div class="sol-control-item">
+        <label for="cantidadRayosSol"><i class="fa-solid fa-sun" style="color: #ff9800;"></i> Rayos (opciones):</label>
+        <input
+          type="number"
+          id="cantidadRayosSol"
+          min="2"
+          max="30"
+          value="10"
+          aria-label="Cantidad de rayos del sol"
+        />
       </div>
 
       <div class="sol-actions">
@@ -71,6 +83,25 @@
       <button type="button" onclick="generarSolPersonalizado()">
         <i class="fa-solid fa-check"></i> Crear Sol
       </button>
+    </div>
+
+    <!-- Barra de estadísticas: Tiempo, Aciertos y Errores del Sol -->
+    <div id="statsSectionSol" class="stats-bar">
+      <div class="stat-badge stat-time">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span class="stat-label">Tiempo</span>
+        <span class="stat-value" id="cronometroTiempoSol">00:00</span>
+      </div>
+      <div class="stat-badge stat-hits">
+        <i class="fa-solid fa-circle-check"></i>
+        <span class="stat-label">Aciertos</span>
+        <span class="stat-value" id="contadorAciertosSol">0</span>
+      </div>
+      <div class="stat-badge stat-errors">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <span class="stat-label">Errores</span>
+        <span class="stat-value" id="contadorErroresSol">0</span>
+      </div>
     </div>
 
     <!-- Barra de progreso de rayos iluminados -->
@@ -109,7 +140,7 @@
     <div id="solMensajeFinal" class="sol-mensaje-final" style="display: none;">
       <div class="sun-trophy">☀️🏆☀️</div>
       <h2>¡Has iluminado todo el Sol ABN!</h2>
-      <p id="solResumenFinal">Has completado los 8 rayos del número correctamente.</p>
+      <p id="solResumenFinal">Has completado todos los rayos del número correctamente.</p>
       <button type="button" class="btn-warm" onclick="generarSolAleatorio()">
         <i class="fa-solid fa-rotate-right"></i> Jugar con otro Sol
       </button>
@@ -118,7 +149,7 @@
 
   <div id="cookie-modal-container"></div>
 
-  <script src="js/soles.js?v=1.0.1"></script>
+  <script src="js/soles.js?v=1.0.3"></script>
   <script src="js/navbar.js?v=1.0.5"></script>
   <script src="js/footer.js?v=1.0.4"></script>
   <script src="js/cookie-modal.js?v=1.0.3"></script>

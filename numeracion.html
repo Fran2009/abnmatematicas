@@ -35,6 +35,25 @@
       <button id="generarBtn"><i class="fa-solid fa-dice"></i> Generar Números</button>
     </div>
 
+    <!-- Barra de Estadísticas Acumulativa de la Sesión -->
+    <div class="stats-bar" id="statsSectionNumeracion">
+      <div class="stat-badge stat-time" title="Tiempo acumulado en esta sesión">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span class="stat-label">Tiempo</span>
+        <strong id="cronometroTiempoNumeracion" class="stat-value">00:00</strong>
+      </div>
+      <div class="stat-badge stat-hits" title="Aciertos acumulados">
+        <i class="fa-solid fa-circle-check"></i>
+        <span class="stat-label">Aciertos</span>
+        <strong id="contadorAciertosNumeracion" class="stat-value">0</strong>
+      </div>
+      <div class="stat-badge stat-errors" title="Fallos acumulados">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <span class="stat-label">Fallos</span>
+        <strong id="contadorErroresNumeracion" class="stat-value">0</strong>
+      </div>
+    </div>
+
     <div id="mensaje">¡Pulsa en "Generar Números" para empezar!</div>
     <div id="grid-container"></div>
   </div>

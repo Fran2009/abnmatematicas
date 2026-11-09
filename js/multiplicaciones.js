@@ -4,7 +4,17 @@
 let ejerciciosPool = [];
 let indiceActual = 0;
 let aciertos = 0;
+let errores = 0;
 let totalEjercicios = 0;
+let cronometroInterval = null;
+let tiempoSegundos = 0;
+let haFalladoFilaActual = false;
+
+function formatearTiempo(segundos) {
+  const mins = Math.floor(segundos / 60);
+  const secs = segundos % 60;
+  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const btnComenzar = document.getElementById("btnComenzar");
@@ -23,6 +33,22 @@ document.addEventListener("DOMContentLoaded", () => {
     btnReiniciarFinal.addEventListener("click", reiniciarPractica);
   }
 
+  // Escuchar cambios en la configuración para actualizar el resumen de combinaciones en vivo
+  const inputsConfig = [
+    document.getElementById("tablaDesde"),
+    document.getElementById("tablaHasta"),
+    document.getElementById("multiplicarHasta"),
+    document.getElementById("tipoCantidad"),
+    document.getElementById("cantidadPersonalizada")
+  ];
+
+  inputsConfig.forEach((inp) => {
+    if (inp) {
+      inp.addEventListener("input", calcularInfoCombinaciones);
+      inp.addEventListener("change", calcularInfoCombinaciones);
+    }
+  });
+
   // Permitir pulsar Enter en los inputs de configuración para comenzar
   const configInputs = document.querySelectorAll(".config-panel input");
   configInputs.forEach((inp) => {
@@ -32,15 +58,63 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  calcularInfoCombinaciones();
 });
 
 /**
- * Inicia la práctica de multiplicaciones generando todas las combinaciones sin repetición
+ * Calcula y muestra en vivo cuántas combinaciones únicas existen o si habrá repeticiones
+ */
+function calcularInfoCombinaciones() {
+  const inputDesde = document.getElementById("tablaDesde");
+  const inputHasta = document.getElementById("tablaHasta");
+  const inputMultHasta = document.getElementById("multiplicarHasta");
+  const selectTipo = document.getElementById("tipoCantidad");
+  const inputCustom = document.getElementById("cantidadPersonalizada");
+  const infoEl = document.getElementById("infoCombinaciones");
+
+  if (!inputDesde || !inputHasta || !inputMultHasta || !selectTipo || !infoEl) return;
+
+  let d = parseInt(inputDesde.value, 10);
+  let h = parseInt(inputHasta.value, 10);
+  let m = parseInt(inputMultHasta.value, 10);
+
+  if (isNaN(d) || d < 1) d = 1;
+  if (isNaN(h) || h < 1) h = 12;
+  if (isNaN(m) || m < 1) m = 12;
+
+  const minD = Math.min(d, h);
+  const maxH = Math.max(d, h);
+  const totalUnicas = Math.max(1, (maxH - minD + 1) * Math.max(1, m));
+
+  const modo = selectTipo.value;
+  if (modo === "custom") {
+    if (inputCustom) inputCustom.style.display = "inline-block";
+  } else {
+    if (inputCustom) inputCustom.style.display = "none";
+  }
+
+  if (modo === "todas") {
+    infoEl.innerHTML = `<i class="fa-solid fa-shuffle"></i> <strong>${totalUnicas} combinaciones únicas</strong> en orden aleatorio (sin repetir)`;
+  } else {
+    let cant = (modo === "custom") ? (parseInt(inputCustom?.value, 10) || 10) : parseInt(modo, 10);
+    if (cant <= totalUnicas) {
+      infoEl.innerHTML = `<i class="fa-solid fa-dice"></i> <strong>${cant} preguntas aleatorias</strong> de ${totalUnicas} posibles (sin repetir)`;
+    } else {
+      infoEl.innerHTML = `<i class="fa-solid fa-repeat"></i> <strong>${cant} preguntas</strong> (con repetición al superar las ${totalUnicas} combinaciones posibles)`;
+    }
+  }
+}
+
+/**
+ * Inicia la práctica de multiplicaciones según el modo de cantidad configurado
  */
 function iniciarPractica() {
   const inputDesde = document.getElementById("tablaDesde");
   const inputHasta = document.getElementById("tablaHasta");
   const inputMultHasta = document.getElementById("multiplicarHasta");
+  const selectTipo = document.getElementById("tipoCantidad");
+  const inputCustom = document.getElementById("cantidadPersonalizada");
 
   let desde = parseInt(inputDesde.value, 10);
   let hasta = parseInt(inputHasta.value, 10);
@@ -60,11 +134,11 @@ function iniciarPractica() {
     inputHasta.value = hasta;
   }
 
-  // Generar todas las combinaciones únicas
-  ejerciciosPool = [];
+  // Generar todas las combinaciones únicas base
+  const todasCombinaciones = [];
   for (let tabla = desde; tabla <= hasta; tabla++) {
     for (let mult = 1; mult <= multHasta; mult++) {
-      ejerciciosPool.push({
+      todasCombinaciones.push({
         a: tabla,
         b: mult,
         resultado: tabla * mult
@@ -72,16 +146,80 @@ function iniciarPractica() {
     }
   }
 
-  // Barajar con algoritmo Fisher-Yates para garantizar aleatoriedad sin repetición
-  for (let i = ejerciciosPool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [ejerciciosPool[i], ejerciciosPool[j]] = [ejerciciosPool[j], ejerciciosPool[i]];
+  const modo = selectTipo ? selectTipo.value : "todas";
+  ejerciciosPool = [];
+
+  if (modo === "todas") {
+    // Modo: TODAS las combinaciones en orden aleatorio (sin repetición)
+    ejerciciosPool = [...todasCombinaciones];
+    for (let i = ejerciciosPool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [ejerciciosPool[i], ejerciciosPool[j]] = [ejerciciosPool[j], ejerciciosPool[i]];
+    }
+  } else {
+    // Modo: cantidad determinada
+    let N = (modo === "custom") ? parseInt(inputCustom?.value, 10) : parseInt(modo, 10);
+    if (isNaN(N) || N < 1) N = 10;
+    if (N > 500) N = 500;
+
+    if (N <= todasCombinaciones.length) {
+      // Si la cantidad es menor o igual al total de combinaciones: aleatorias y NUNCA se repiten
+      const copia = [...todasCombinaciones];
+      for (let i = copia.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copia[i], copia[j]] = [copia[j], copia[i]];
+      }
+      ejerciciosPool = copia.slice(0, N);
+    } else {
+      // Si la cantidad es mayor al total de combinaciones disponibles:
+      // Se repiten completando rondas barajadas sin consecutivas iguales
+      while (ejerciciosPool.length < N) {
+        const ronda = [...todasCombinaciones];
+        for (let i = ronda.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [ronda[i], ronda[j]] = [ronda[j], ronda[i]];
+        }
+        if (
+          ejerciciosPool.length > 0 &&
+          ronda.length > 1 &&
+          ronda[0].a === ejerciciosPool[ejerciciosPool.length - 1].a &&
+          ronda[0].b === ejerciciosPool[ejerciciosPool.length - 1].b
+        ) {
+          [ronda[0], ronda[1]] = [ronda[1], ronda[0]];
+        }
+        for (const item of ronda) {
+          ejerciciosPool.push({ ...item });
+          if (ejerciciosPool.length === N) break;
+        }
+      }
+    }
   }
 
   // Inicializar estado
   indiceActual = 0;
   aciertos = 0;
+  errores = 0;
+  haFalladoFilaActual = false;
   totalEjercicios = ejerciciosPool.length;
+
+  // Iniciar cronómetro y estadísticas
+  if (cronometroInterval) clearInterval(cronometroInterval);
+  tiempoSegundos = 0;
+  const statsSection = document.getElementById("statsSection");
+  if (statsSection) statsSection.style.display = "flex";
+  
+  const cronoEl = document.getElementById("cronometroTiempo");
+  if (cronoEl) cronoEl.textContent = "00:00";
+  const aciertosEl = document.getElementById("contadorAciertos");
+  if (aciertosEl) aciertosEl.textContent = "0";
+  const erroresEl = document.getElementById("contadorErrores");
+  if (erroresEl) erroresEl.textContent = "0";
+
+  cronometroInterval = setInterval(() => {
+    tiempoSegundos++;
+    const crono = document.getElementById("cronometroTiempo");
+    if (crono) crono.textContent = formatearTiempo(tiempoSegundos);
+  }, 1000);
 
   // Limpiar contenedores
   const container = document.getElementById("ejerciciosContainer");
@@ -111,6 +249,8 @@ function generarFila(index) {
   // Desmarcar activa de las filas anteriores
   const filasAnteriores = container.querySelectorAll(".fila-ejercicio");
   filasAnteriores.forEach(f => f.classList.remove("activa"));
+
+  haFalladoFilaActual = false;
 
   // Crear fila
   const fila = document.createElement("div");
@@ -185,6 +325,10 @@ function validarRespuesta(inputEl, iconEl, ejercicio, index) {
     inputEl.disabled = true;
 
     aciertos++;
+    haFalladoFilaActual = false;
+    const aciertosEl = document.getElementById("contadorAciertos");
+    if (aciertosEl) aciertosEl.textContent = aciertos;
+
     actualizarProgreso();
 
     // Comprobar si quedan más ejercicios en el pool
@@ -198,18 +342,24 @@ function validarRespuesta(inputEl, iconEl, ejercicio, index) {
     return;
   }
 
-  // Si no es correcto, determinar si puede ser prefijo de un número mayor
+  // Si no es correcto, determinar si aún no ha completado las cifras que requiere la casilla
   const esperadoStr = resultadoEsperado.toString();
-  const esPrefijo = esperadoStr.startsWith(valorStr) && valorStr.length < esperadoStr.length;
+  const faltanCifras = valorStr.length < esperadoStr.length;
 
-  if (esPrefijo) {
-    // Aún está escribiendo (ej: escribe '3' y la respuesta es '36'), mantenemos neutro
+  if (faltanCifras) {
+    // Aún está escribiendo (ej: ha puesto 1 cifra y la solución es de 2 cifras), mantenemos neutro
     marcarEstado(inputEl, null);
     iconEl.innerHTML = "";
   } else {
-    // Si ya no puede ser correcto (longitud igual o mayor, o no coincide el prefijo)
+    // Ya ha alcanzado la cantidad de cifras requerida y el resultado es incorrecto
     marcarEstado(inputEl, false);
     iconEl.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+    if (!haFalladoFilaActual) {
+      errores++;
+      haFalladoFilaActual = true;
+      const erroresEl = document.getElementById("contadorErrores");
+      if (erroresEl) erroresEl.textContent = errores;
+    }
   }
 }
 
@@ -227,6 +377,12 @@ function validarForzado(inputEl, iconEl, ejercicio) {
   } else {
     marcarEstado(inputEl, false);
     iconEl.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+    if (!haFalladoFilaActual) {
+      errores++;
+      haFalladoFilaActual = true;
+      const erroresEl = document.getElementById("contadorErrores");
+      if (erroresEl) erroresEl.textContent = errores;
+    }
   }
 }
 
@@ -267,8 +423,16 @@ function actualizarProgreso() {
  * Muestra el mensaje de enhorabuena y lanza la animación de confeti
  */
 function mostrarMensajeFinal() {
+  if (cronometroInterval) {
+    clearInterval(cronometroInterval);
+    cronometroInterval = null;
+  }
   const mensajeFinal = document.getElementById("mensajeFinal");
   mensajeFinal.style.display = "block";
+  const pDesc = mensajeFinal.querySelector("p");
+  if (pDesc) {
+    pDesc.innerHTML = `Has completado las <strong>${totalEjercicios}</strong> multiplicaciones en <strong>${formatearTiempo(tiempoSegundos)}</strong> con <strong>${aciertos}</strong> aciertos y <strong>${errores}</strong> ${errores === 1 ? "error" : "errores"}.`;
+  }
   mensajeFinal.scrollIntoView({ behavior: "smooth", block: "center" });
 
   lanzarConfeti();

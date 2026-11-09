@@ -134,6 +134,46 @@
   transition: background-color 0.25s, width 0.25s;
 }
 
+/* Mensaje final de la Casita */
+.casita-mensaje-final {
+  margin-top: 24px;
+  background: linear-gradient(135deg, #f3e5f5, #e8f5e9);
+  border: 2px solid #ab47bc;
+  border-radius: 16px;
+  padding: 24px 18px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(103, 58, 183, 0.12);
+}
+
+.casita-trophy {
+  font-size: 2.6rem;
+  margin-bottom: 8px;
+}
+
+.casita-mensaje-final h2 {
+  color: #4a148c;
+  margin: 0 0 8px 0;
+  font-size: 1.5rem;
+}
+
+.casita-mensaje-final p {
+  color: #2e7d32;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+}
+
+.casita-stats-resumen {
+  margin: 12px 0 18px 0;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #311b92;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 /* Responsivo: ajustes para pantallas pequeñas */
 @media (max-width: 600px) {
   .casita-controls {

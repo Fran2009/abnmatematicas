@@ -4,6 +4,20 @@ let numeroTejado = null;  // Número generado en el tejado
 let columnsNeeded = [];   // Array de columnas a usar (por ejemplo, ["C", "D", "U"] para nivel 2)
 let nextRowIndex = 1;     // Para generar filas dinámicamente
 
+// Cronómetro y estadísticas de la Casita
+let cronometroCasitaInterval = null;
+let tiempoSegundosCasita = 0;
+let aciertosCasita = 0;
+let erroresCasita = 0;
+let filasConFalloCifras = new Set();
+let filasConFalloSuma = new Set();
+
+function formatearTiempoCasita(segundos) {
+  const mins = Math.floor(segundos / 60);
+  const secs = segundos % 60;
+  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
+
 // Función que genera el número y construye la casita
 function generarNumero() {
   const nivel = parseInt(document.getElementById('nivel').value, 10);
@@ -42,6 +56,33 @@ function generarNumero() {
 
 // Construye la tabla de la casita (tejado y primera fila)
 function construirTablaCasita(nivel, numero) {
+  // Reiniciar tiempo y estadísticas de la casita
+  if (cronometroCasitaInterval) clearInterval(cronometroCasitaInterval);
+  tiempoSegundosCasita = 0;
+  aciertosCasita = 0;
+  erroresCasita = 0;
+  filasConFalloCifras.clear();
+  filasConFalloSuma.clear();
+
+  const finalEl = document.getElementById("casitaMensajeFinal");
+  if (finalEl) finalEl.style.display = "none";
+
+  const statsSec = document.getElementById("statsSectionCasita");
+  if (statsSec) statsSec.style.display = "flex";
+
+  const cronoEl = document.getElementById("cronometroTiempoCasita");
+  if (cronoEl) cronoEl.textContent = "00:00";
+  const aciertosEl = document.getElementById("contadorAciertosCasita");
+  if (aciertosEl) aciertosEl.textContent = "0";
+  const erroresEl = document.getElementById("contadorErroresCasita");
+  if (erroresEl) erroresEl.textContent = "0";
+
+  cronometroCasitaInterval = setInterval(() => {
+    tiempoSegundosCasita++;
+    const crono = document.getElementById("cronometroTiempoCasita");
+    if (crono) crono.textContent = formatearTiempoCasita(tiempoSegundosCasita);
+  }, 1000);
+
   const casitaHead = document.getElementById('casitaHead');
   const casitaBody = document.getElementById('casitaBody');
   casitaHead.innerHTML = '';
@@ -140,8 +181,18 @@ function addRow() {
     const td = document.createElement('td');
     const input = document.createElement('input');
     input.type = 'tel';
-    // Cada input de cifras se valida al cambiar
-    input.addEventListener('input', () => validarFila(rowIndex));
+    // Cada input de cifras se valida al escribir (sin forzar error prematuro)
+    input.addEventListener('input', () => validarFila(rowIndex, false));
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        validarFila(rowIndex, true);
+      }
+    });
+    input.addEventListener('blur', () => {
+      if (input.value.trim() !== '' && !input.disabled) {
+        validarFila(rowIndex, true);
+      }
+    });
     td.appendChild(input);
     tr.appendChild(td);
   });
@@ -155,7 +206,17 @@ function addRow() {
   inputSuma.addEventListener('input', function() {
     resizeInput(this);
     // Validar solo el contenido de "Suma" sin generar nueva fila
-    validarSuma(rowIndex);
+    validarSuma(rowIndex, false);
+  });
+  inputSuma.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      validarSuma(rowIndex, true);
+    }
+  });
+  inputSuma.addEventListener('blur', function() {
+    if (this.value.trim() !== '' && !this.disabled) {
+      validarSuma(rowIndex, true);
+    }
   });
   tdSuma.appendChild(inputSuma);
   tr.appendChild(tdSuma);
@@ -174,11 +235,8 @@ function resizeInput(input) {
 
 // Valida la fila con índice rowIndex en cuanto a la descomposición (columnas de cifras)
 // Si es correcta, deshabilita las columnas de cifras y genera la nueva fila.
-// La validación de la columna "Suma" se realiza de forma separada (ver función validarSuma)
-// Valida la fila con índice rowIndex en cuanto a la descomposición (columnas de cifras)
-// Si es correcta, deshabilita las columnas de cifras y genera la nueva fila.
-// La validación de la columna "Suma" se realiza de forma separada (ver función validarSuma)
-function validarFila(rowIndex) {
+// Si aún no se han escrito todas las cifras necesarias (ej: escribe 1 de 17), se mantiene neutro.
+function validarFila(rowIndex, forzar = false) {
   const fila = document.getElementById('fila_' + rowIndex);
   if (!fila) return;
   
@@ -204,33 +262,77 @@ function validarFila(rowIndex) {
   // La descomposición es correcta si computedValue coincide con numeroTejado
   const decompositionCorrect = (computedValue === numeroTejado);
 
-  // Marcar cada input de cifras según el estado
-  digitInputs.forEach(inp => {
-    marcarEstado(inp, decompositionCorrect);
-  });
+  if (decompositionCorrect) {
+    digitInputs.forEach(inp => marcarEstado(inp, true));
+    aciertosCasita++;
+    const aciertosEl = document.getElementById("contadorAciertosCasita");
+    if (aciertosEl) aciertosEl.textContent = aciertosCasita;
+    filasConFalloCifras.delete(rowIndex);
 
-  // Verificar si todas las columnas son 0 menos U (columna U es la última)
-  const allZeroExceptU = digitInputs.slice(0, nDigits - 1).every(inp => parseInt(inp.value, 10) === 0);
-  
-  // Si la descomposición es correcta y todas las columnas son 0 (excepto U), no generamos nueva fila
-  if (decompositionCorrect && allZeroExceptU) {
-    // Deshabilitar solo los inputs de cifras (no el de "Suma")
-    for (let i = 0; i < totalDigits; i++) {
-      digitInputs[i].disabled = true;
+    // Verificar si todas las columnas son 0 menos U (columna U es la última)
+    const allZeroExceptU = digitInputs.slice(0, nDigits - 1).every(inp => parseInt(inp.value, 10) === 0);
+    
+    // Si la descomposición es correcta y todas las columnas son 0 (excepto U), no generamos nueva fila: ¡Casita completada!
+    if (allZeroExceptU) {
+      // Deshabilitar solo los inputs de cifras (no el de "Suma")
+      for (let i = 0; i < totalDigits; i++) {
+        digitInputs[i].disabled = true;
+      }
+      mostrarExitoCasita();
+    } else {
+      // Si la descomposición es correcta pero no todas las columnas son 0, generar nueva fila
+      for (let i = 0; i < totalDigits; i++) {
+        digitInputs[i].disabled = true;
+      }
+      addRow();
     }
-  } else if (decompositionCorrect) {
-    // Si la descomposición es correcta pero no todas las columnas son 0, generar nueva fila
-    for (let i = 0; i < totalDigits; i++) {
-      digitInputs[i].disabled = true;
+    return;
+  }
+
+  // Si NO es correcto y NO se ha forzado comprobación, comprobar si alguna casilla aún no ha completado las cifras requeridas
+  if (!forzar) {
+    let algunaCasillaIncompleta = false;
+    for (let k = 0; k < totalDigits; k++) {
+      let sumOtros = 0;
+      for (let j = 0; j < totalDigits; j++) {
+        if (j !== k) {
+          const valJ = parseInt(digitInputs[j].value, 10);
+          const multJ = Math.pow(10, totalDigits - 1 - j);
+          sumOtros += (isNaN(valJ) ? 0 : valJ) * multJ;
+        }
+      }
+      const multK = Math.pow(10, totalDigits - 1 - k);
+      const valRestante = numeroTejado - sumOtros;
+      if (valRestante >= 0 && valRestante % multK === 0) {
+        const neededVal = valRestante / multK;
+        const cifrasNecesarias = String(neededVal).length;
+        const cifrasActuales = digitInputs[k].value.trim().length;
+        if (cifrasActuales < cifrasNecesarias) {
+          algunaCasillaIncompleta = true;
+          break;
+        }
+      }
     }
-    // Generar nueva fila
-    addRow();
+
+    if (algunaCasillaIncompleta) {
+      // Todavía está tecleando las cifras que necesita: mantener estado neutro (sin rojo ni fallo)
+      digitInputs.forEach(inp => marcarEstado(inp, null));
+      return;
+    }
+  }
+
+  // Ha completado la cantidad de cifras requerida o ha pulsado Enter / perdido foco, y es incorrecto
+  digitInputs.forEach(inp => marcarEstado(inp, false));
+  if (!filasConFalloCifras.has(rowIndex)) {
+    erroresCasita++;
+    filasConFalloCifras.add(rowIndex);
+    const erroresEl = document.getElementById("contadorErroresCasita");
+    if (erroresEl) erroresEl.textContent = erroresCasita;
   }
 }
 
-
 // Valida el contenido del input "Suma" en la fila (sin generar nueva fila)
-function validarSuma(rowIndex) {
+function validarSuma(rowIndex, forzar = false) {
   const fila = document.getElementById('fila_' + rowIndex);
   if (!fila) return;
   const inputs = fila.getElementsByTagName('input');
@@ -253,10 +355,124 @@ function validarSuma(rowIndex) {
     expectedParts.push(val * multiplier);
   }
   const expectedSumaString = expectedParts.join("+");
+  const sumaVal = sumaInput.value.trim();
 
   // Validar que el contenido del input suma coincida con la cadena esperada
-  const sumaCorrect = (sumaInput.value.trim() === expectedSumaString);
-  marcarEstado(sumaInput, sumaCorrect);
+  const sumaCorrect = (sumaVal === expectedSumaString);
+
+  if (sumaCorrect) {
+    marcarEstado(sumaInput, true);
+    aciertosCasita++;
+    const aciertosEl = document.getElementById("contadorAciertosCasita");
+    if (aciertosEl) aciertosEl.textContent = aciertosCasita;
+    filasConFalloSuma.delete(rowIndex);
+    actualizarResumenFinalCasitaSiVisible();
+    return;
+  }
+
+  // Si aún no ha escrito todos los caracteres que requiere la suma y no se fuerza
+  if (!forzar && sumaVal.length < expectedSumaString.length) {
+    marcarEstado(sumaInput, null);
+    return;
+  }
+
+  // Si ha alcanzado la longitud o se fuerza comprobación y es incorrecto
+  marcarEstado(sumaInput, false);
+  if (!filasConFalloSuma.has(rowIndex)) {
+    erroresCasita++;
+    filasConFalloSuma.add(rowIndex);
+    const erroresEl = document.getElementById("contadorErroresCasita");
+    if (erroresEl) erroresEl.textContent = erroresCasita;
+    actualizarResumenFinalCasitaSiVisible();
+  }
+}
+
+// Muestra el mensaje final de enhorabuena, detiene el cronómetro y lanza confeti
+function mostrarExitoCasita() {
+  if (cronometroCasitaInterval) {
+    clearInterval(cronometroCasitaInterval);
+    cronometroCasitaInterval = null;
+  }
+
+  const finalEl = document.getElementById("casitaMensajeFinal");
+  const resumenEl = document.getElementById("casitaResumenFinal");
+
+  if (resumenEl) {
+    resumenEl.innerHTML = `¡Fantástico! Has completado todas las descomposiciones posibles del número <strong>${numeroTejado}</strong>.`;
+  }
+
+  actualizarResumenFinalCasitaSiVisible();
+
+  if (finalEl) {
+    finalEl.style.display = "block";
+    finalEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  lanzarConfetiCasita();
+}
+
+// Mantiene sincronizado el resumen de estadísticas si el mensaje final ya está visible
+function actualizarResumenFinalCasitaSiVisible() {
+  const finalEl = document.getElementById("casitaMensajeFinal");
+  const statsEl = document.getElementById("casitaStatsResumen");
+  if (!finalEl || finalEl.style.display === "none" || !statsEl) return;
+
+  statsEl.innerHTML = `
+    <span><i class="fa-solid fa-stopwatch" style="color:#673ab7;"></i> Tiempo: <strong>${formatearTiempoCasita(tiempoSegundosCasita)}</strong></span>
+    <span><i class="fa-solid fa-circle-check" style="color:#2e7d32;"></i> Aciertos: <strong>${aciertosCasita}</strong></span>
+    <span><i class="fa-solid fa-circle-xmark" style="color:#c62828;"></i> Errores: <strong>${erroresCasita}</strong></span>
+  `;
+}
+
+// Animación festiva de confeti en la Casita
+function lanzarConfetiCasita() {
+  let canvas = document.getElementById("confettiCanvasCasita");
+  if (!canvas) {
+    canvas = document.createElement("canvas");
+    canvas.id = "confettiCanvasCasita";
+    canvas.style.cssText =
+      "position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;";
+    document.body.appendChild(canvas);
+  }
+
+  const ctx = canvas.getContext("2d");
+  const width = (canvas.width = window.innerWidth);
+  const height = (canvas.height = window.innerHeight);
+
+  const colores = ["#673ab7", "#ab47bc", "#4caf50", "#ff7043", "#ffb300", "#29b6f6"];
+  const particulas = Array.from({ length: 80 }, () => ({
+    x: Math.random() * width,
+    y: Math.random() * height - height,
+    size: Math.random() * 9 + 5,
+    color: colores[Math.floor(Math.random() * colores.length)],
+    speedY: Math.random() * 3.2 + 2.2,
+    speedX: Math.random() * 2 - 1,
+    rotation: Math.random() * 360,
+    rotationSpeed: Math.random() * 6 - 3
+  }));
+
+  let frames = 0;
+  function animar() {
+    ctx.clearRect(0, 0, width, height);
+    particulas.forEach((p) => {
+      p.y += p.speedY;
+      p.x += p.speedX;
+      p.rotation += p.rotationSpeed;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+      ctx.restore();
+    });
+    frames++;
+    if (frames < 170) {
+      requestAnimationFrame(animar);
+    } else if (canvas.parentNode) {
+      canvas.parentNode.removeChild(canvas);
+    }
+  }
+  requestAnimationFrame(animar);
 }
 
 // Deshabilita todos los inputs de las columnas de cifras en la fila (no la columna "Suma")

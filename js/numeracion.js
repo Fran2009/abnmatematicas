@@ -7,6 +7,39 @@ let correctResult = null;
 let currentOperation = null;
 let resultadoObtenido = false;  // Flag que indica si ya se acertó el resultado
 
+// Estadísticas acumulativas de sesión (persisten aunque se generen nuevos números)
+let cronometroNumeracionInterval = null;
+let tiempoSegundosNumeracion = 0;
+let aciertosNumeracion = 0;
+let erroresNumeracion = 0;
+let cronometroIniciado = false;
+
+function formatearTiempoNumeracion(segundos) {
+  const mins = Math.floor(segundos / 60);
+  const secs = segundos % 60;
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+function actualizarStatsNumeracion() {
+  const tiempoEl = document.getElementById('cronometroTiempoNumeracion');
+  const aciertosEl = document.getElementById('contadorAciertosNumeracion');
+  const erroresEl = document.getElementById('contadorErroresNumeracion');
+  if (tiempoEl) tiempoEl.textContent = formatearTiempoNumeracion(tiempoSegundosNumeracion);
+  if (aciertosEl) aciertosEl.textContent = aciertosNumeracion;
+  if (erroresEl) erroresEl.textContent = erroresNumeracion;
+}
+
+function iniciarCronometroNumeracion() {
+  if (cronometroIniciado) return;
+  cronometroIniciado = true;
+  actualizarStatsNumeracion();
+  cronometroNumeracionInterval = setInterval(() => {
+    tiempoSegundosNumeracion++;
+    const tiempoEl = document.getElementById('cronometroTiempoNumeracion');
+    if (tiempoEl) tiempoEl.textContent = formatearTiempoNumeracion(tiempoSegundosNumeracion);
+  }, 1000);
+}
+
 // Función para formatear el número en HTML: 
 // Si el número tiene más de un dígito, separa la parte de las decenas (o centenas, etc.) y la unidad.
 function formatNumber(n) {
@@ -45,13 +78,17 @@ function cellClicked(cellNumber, cellElement) {
   if (correctResult === null) return;
 
   if (cellNumber === correctResult) {
-    // Celda correcta: marcar en verde y mostrar mensaje
+    // Celda correcta: marcar en verde, contar acierto y mostrar mensaje
     cellElement.classList.add('correct-answer');
     document.getElementById('mensaje').textContent =
       '¡Correcto! ' + operand1 + (currentOperation === 'suma' ? ' + ' : ' - ') + operand2 + ' = ' + correctResult;
     resultadoObtenido = true;
+    aciertosNumeracion++;
+    actualizarStatsNumeracion();
   } else {
-    // Celda incorrecta: parpadeo único, más lento (2s)
+    // Celda incorrecta: contar fallo y parpadeo de error
+    erroresNumeracion++;
+    actualizarStatsNumeracion();
     cellElement.classList.add('error-blink');
     setTimeout(() => {
       cellElement.classList.remove('error-blink');
@@ -61,6 +98,8 @@ function cellClicked(cellNumber, cellElement) {
 
 // Función para generar los dos números aleatorios según la operación
 function generarNumeros() {
+  iniciarCronometroNumeracion();
+
   const operacionSelect = document.getElementById('operacion');
   currentOperation = operacionSelect.value;
   let n1, n2, result;
@@ -120,6 +159,7 @@ function clearGridHighlights() {
 // Al cargar la página se genera el grid y se asigna el evento al botón
 window.addEventListener('load', () => {
   generateGrid();
+  actualizarStatsNumeracion();
   const generarBtn = document.getElementById('generarBtn');
   generarBtn.addEventListener('click', () => {
     correctResult = null;

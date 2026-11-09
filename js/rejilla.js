@@ -10,6 +10,19 @@ let Rcalc = [];
 let R2calc = [];
 let nextRowIndex = 1;
 
+// Cronómetro y estadísticas de la Rejilla
+let cronometroRejillaInterval = null;
+let tiempoSegundosRejilla = 0;
+let aciertosRejilla = 0;
+let erroresRejilla = 0;
+let filasConFallo = new Set();
+
+function formatearTiempoRejilla(segundos) {
+  const mins = Math.floor(segundos / 60);
+  const secs = segundos % 60;
+  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
+
 // Diccionario de guías didácticas y ejemplos visuales para niños
 const OPERATION_GUIDES = {
   suma: {
@@ -336,6 +349,29 @@ function construirRejillaActiva() {
   const isTriple = esOperacionTriple(currentOperation);
   nextRowIndex = 1;
 
+  // Reiniciar tiempo y estadísticas de la rejilla
+  if (cronometroRejillaInterval) clearInterval(cronometroRejillaInterval);
+  tiempoSegundosRejilla = 0;
+  aciertosRejilla = 0;
+  erroresRejilla = 0;
+  filasConFallo.clear();
+
+  const statsSec = document.getElementById("statsSectionRejilla");
+  if (statsSec) statsSec.style.display = "flex";
+
+  const cronoEl = document.getElementById("cronometroTiempoRejilla");
+  if (cronoEl) cronoEl.textContent = "00:00";
+  const aciertosEl = document.getElementById("contadorAciertosRejilla");
+  if (aciertosEl) aciertosEl.textContent = "0";
+  const erroresEl = document.getElementById("contadorErroresRejilla");
+  if (erroresEl) erroresEl.textContent = "0";
+
+  cronometroRejillaInterval = setInterval(() => {
+    tiempoSegundosRejilla++;
+    const crono = document.getElementById("cronometroTiempoRejilla");
+    if (crono) crono.textContent = formatearTiempoRejilla(tiempoSegundosRejilla);
+  }, 1000);
+
   // Estado inicial en la fila 0 según el tipo de operación ABN
   if (currentOperation === "escalera_asc") {
     // Col 2 (Tcalc): diferencia acumulada empieza en 0
@@ -636,7 +672,15 @@ function agregarFila() {
   inputPartial.id = "partial_" + rowIndex;
   inputPartial.placeholder = "Paso";
   inputPartial.oninput = function () {
-    validarFila(rowIndex);
+    validarFila(rowIndex, false);
+  };
+  inputPartial.onkeydown = function (e) {
+    if (e.key === "Enter") validarFila(rowIndex, true);
+  };
+  inputPartial.onblur = function () {
+    if (inputPartial.value.trim() !== "" && !inputPartial.disabled) {
+      validarFila(rowIndex, true);
+    }
   };
   wrap1.appendChild(inputPartial);
   td1.appendChild(wrap1);
@@ -649,7 +693,15 @@ function agregarFila() {
   inputTotal.id = "total_" + rowIndex;
   inputTotal.placeholder = "Total";
   inputTotal.oninput = function () {
-    validarFila(rowIndex);
+    validarFila(rowIndex, false);
+  };
+  inputTotal.onkeydown = function (e) {
+    if (e.key === "Enter") validarFila(rowIndex, true);
+  };
+  inputTotal.onblur = function () {
+    if (inputTotal.value.trim() !== "" && !inputTotal.disabled) {
+      validarFila(rowIndex, true);
+    }
   };
   td2.appendChild(inputTotal);
 
@@ -665,7 +717,15 @@ function agregarFila() {
     inputRemainder.placeholder = "Queda";
   }
   inputRemainder.oninput = function () {
-    validarFila(rowIndex);
+    validarFila(rowIndex, false);
+  };
+  inputRemainder.onkeydown = function (e) {
+    if (e.key === "Enter") validarFila(rowIndex, true);
+  };
+  inputRemainder.onblur = function () {
+    if (inputRemainder.value.trim() !== "" && !inputRemainder.disabled) {
+      validarFila(rowIndex, true);
+    }
   };
   td3.appendChild(inputRemainder);
 
@@ -686,7 +746,15 @@ function agregarFila() {
       inputRemainder2.placeholder = "Queda";
     }
     inputRemainder2.oninput = function () {
-      validarFila(rowIndex);
+      validarFila(rowIndex, false);
+    };
+    inputRemainder2.onkeydown = function (e) {
+      if (e.key === "Enter") validarFila(rowIndex, true);
+    };
+    inputRemainder2.onblur = function () {
+      if (inputRemainder2.value.trim() !== "" && !inputRemainder2.disabled) {
+        validarFila(rowIndex, true);
+      }
     };
     td4.appendChild(inputRemainder2);
     tr.appendChild(td4);
@@ -712,7 +780,7 @@ function disableRow(rowIndex) {
 }
 
 // Valida la fila con índice rowIndex
-function validarFila(rowIndex) {
+function validarFila(rowIndex, forzar = false) {
   const isTriple = esOperacionTriple(currentOperation);
 
   const partialInput = document.getElementById("partial_" + rowIndex);
@@ -752,48 +820,62 @@ function validarFila(rowIndex) {
   let remainderCorrect = false;
   let remainder2Correct = false;
 
+  let expTotal = null;
+  let expRem = null;
+
   if (currentOperation === "suma") {
     if (partialVal > prevRemainder || partialVal <= 0) partialCorrect = false;
-    totalCorrect = totalVal === prevTotal + partialVal;
-    remainderCorrect = remainderVal === prevRemainder - partialVal;
+    expTotal = prevTotal + partialVal;
+    expRem = prevRemainder - partialVal;
+    totalCorrect = totalVal === expTotal;
+    remainderCorrect = remainderVal === expRem;
   } else if (
     currentOperation === "resta" ||
     currentOperation === "detraccion_comparacion"
   ) {
     if (partialVal > prevRemainder || partialVal <= 0) partialCorrect = false;
-    totalCorrect = totalVal === prevTotal - partialVal;
-    remainderCorrect = remainderVal === prevRemainder - partialVal;
+    expTotal = prevTotal - partialVal;
+    expRem = prevRemainder - partialVal;
+    totalCorrect = totalVal === expTotal;
+    remainderCorrect = remainderVal === expRem;
   } else if (currentOperation === "escalera_asc") {
     // Subimos desde smallNumber hasta bigNumber
     const maxStep = bigNumber - prevRemainder;
     if (partialVal <= 0 || partialVal > maxStep) partialCorrect = false;
-    totalCorrect = totalVal === prevTotal + partialVal;
-    remainderCorrect = remainderVal === prevRemainder + partialVal;
+    expTotal = prevTotal + partialVal;
+    expRem = prevRemainder + partialVal;
+    totalCorrect = totalVal === expTotal;
+    remainderCorrect = remainderVal === expRem;
   } else if (currentOperation === "escalera_desc") {
     // Bajamos desde bigNumber hasta smallNumber
     const maxStep = prevRemainder - smallNumber;
     if (partialVal <= 0 || partialVal > maxStep) partialCorrect = false;
-    totalCorrect = totalVal === prevTotal + partialVal;
-    remainderCorrect = remainderVal === prevRemainder - partialVal;
+    expTotal = prevTotal + partialVal;
+    expRem = prevRemainder - partialVal;
+    totalCorrect = totalVal === expTotal;
+    remainderCorrect = remainderVal === expRem;
   } else if (currentOperation === "igualacion") {
     if (currentIgualacionMode === "asc") {
       const maxStep = bigNumber - prevRemainder;
       if (partialVal <= 0 || partialVal > maxStep) partialCorrect = false;
-      totalCorrect = totalVal === prevTotal + partialVal;
-      remainderCorrect = remainderVal === prevRemainder + partialVal;
+      expTotal = prevTotal + partialVal;
+      expRem = prevRemainder + partialVal;
     } else {
       const maxStep = prevRemainder - smallNumber;
       if (partialVal <= 0 || partialVal > maxStep) partialCorrect = false;
-      totalCorrect = totalVal === prevTotal + partialVal;
-      remainderCorrect = remainderVal === prevRemainder - partialVal;
+      expTotal = prevTotal + partialVal;
+      expRem = prevRemainder - partialVal;
     }
+    totalCorrect = totalVal === expTotal;
+    remainderCorrect = remainderVal === expRem;
   } else if (currentOperation === "doblesuma") {
     const diffR1 = prevRemainder - remainderVal;
     const diffR2 = prevRemainder2 - remainder2Val;
     if (partialVal <= 0 || partialVal > prevRemainder + prevRemainder2) {
       partialCorrect = false;
     }
-    totalCorrect = totalVal === prevTotal + partialVal;
+    expTotal = prevTotal + partialVal;
+    totalCorrect = totalVal === expTotal;
     if (diffR1 >= 0 && diffR2 >= 0 && diffR1 + diffR2 === partialVal) {
       remainderCorrect = true;
       remainder2Correct = true;
@@ -804,7 +886,8 @@ function validarFila(rowIndex) {
     if (partialVal <= 0 || partialVal > prevRemainder + prevRemainder2) {
       partialCorrect = false;
     }
-    totalCorrect = totalVal === prevTotal - partialVal;
+    expTotal = prevTotal - partialVal;
+    totalCorrect = totalVal === expTotal;
     if (diffR1 >= 0 && diffR2 >= 0 && diffR1 + diffR2 === partialVal) {
       remainderCorrect = true;
       remainder2Correct = true;
@@ -816,22 +899,49 @@ function validarFila(rowIndex) {
     if (prevRemainder > 0) {
       // Fase 1: Todavía estamos sumando la columna central
       if (partialVal <= 0 || partialVal > prevRemainder) partialCorrect = false;
-      totalCorrect = totalVal === prevTotal + partialVal;
+      expTotal = prevTotal + partialVal;
+      totalCorrect = totalVal === expTotal;
       remainderCorrect = diffR1 === partialVal && remainderVal >= 0;
       remainder2Correct = diffR2 === 0;
     } else {
       // Fase 2: La columna central ya es 0, ahora restamos la última columna
       if (partialVal <= 0 || partialVal > prevRemainder2) partialCorrect = false;
-      totalCorrect = totalVal === prevTotal - partialVal;
+      expTotal = prevTotal - partialVal;
+      totalCorrect = totalVal === expTotal;
       remainderCorrect = remainderVal === 0;
       remainder2Correct = diffR2 === partialVal && remainder2Val >= 0;
     }
   }
 
-  marcarEstado(partialInput, partialCorrect);
-  marcarEstado(totalInput, totalCorrect);
-  marcarEstado(remainderInput, remainderCorrect);
-  if (isTriple) marcarEstado(remainder2Input, remainder2Correct);
+  // Si no se fuerza y alguna casilla aún no ha completado las cifras requeridas, no marcar rojo ni error
+  if (!forzar) {
+    let inProgress = false;
+    if (expTotal !== null && !totalCorrect && totalInput.value.trim().length < String(expTotal).length) {
+      marcarEstado(totalInput, null);
+      inProgress = true;
+    } else {
+      marcarEstado(totalInput, totalCorrect);
+    }
+
+    if (expRem !== null && !remainderCorrect && remainderInput.value.trim().length < String(expRem).length) {
+      marcarEstado(remainderInput, null);
+      inProgress = true;
+    } else {
+      marcarEstado(remainderInput, remainderCorrect);
+    }
+
+    marcarEstado(partialInput, partialCorrect);
+    if (isTriple) marcarEstado(remainder2Input, remainder2Correct);
+
+    if (inProgress) {
+      return; // Aún está tecleando cifras, no penalizar con fallo
+    }
+  } else {
+    marcarEstado(partialInput, partialCorrect);
+    marcarEstado(totalInput, totalCorrect);
+    marcarEstado(remainderInput, remainderCorrect);
+    if (isTriple) marcarEstado(remainder2Input, remainder2Correct);
+  }
 
   let allCorrect = partialCorrect && totalCorrect && remainderCorrect;
   if (isTriple) allCorrect = allCorrect && remainder2Correct;
@@ -840,6 +950,11 @@ function validarFila(rowIndex) {
     Tcalc[rowIndex] = totalVal;
     Rcalc[rowIndex] = remainderVal;
     if (isTriple) R2calc[rowIndex] = remainder2Val;
+
+    aciertosRejilla++;
+    const aciertosEl = document.getElementById("contadorAciertosRejilla");
+    if (aciertosEl) aciertosEl.textContent = aciertosRejilla;
+    filasConFallo.delete(rowIndex);
 
     disableRow(rowIndex);
 
@@ -872,10 +987,23 @@ function validarFila(rowIndex) {
     } else {
       mostrarExitoRejilla(totalVal);
     }
+  } else {
+    // Si la fila tiene campos completados pero no es correcta
+    if (!filasConFallo.has(rowIndex)) {
+      erroresRejilla++;
+      filasConFallo.add(rowIndex);
+      const erroresEl = document.getElementById("contadorErroresRejilla");
+      if (erroresEl) erroresEl.textContent = erroresRejilla;
+    }
   }
 }
 
 function mostrarExitoRejilla(resultadoFinal) {
+  if (cronometroRejillaInterval) {
+    clearInterval(cronometroRejillaInterval);
+    cronometroRejillaInterval = null;
+  }
+
   const hintEl = document.getElementById("liveStepHint");
   if (hintEl) {
     hintEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> ¡Has completado todos los pasos de la rejilla!`;
@@ -898,6 +1026,11 @@ function mostrarExitoRejilla(resultadoFinal) {
     <div class="win-icon"><i class="fa-solid fa-award"></i></div>
     <h3>¡Operación completada!</h3>
     <p>${textoExplicativo}</p>
+    <p style="margin-top: 10px; font-weight: bold; color: #1b5e20;">
+      <i class="fa-solid fa-stopwatch"></i> Tiempo: ${formatearTiempoRejilla(tiempoSegundosRejilla)} &nbsp;|&nbsp; 
+      <i class="fa-solid fa-circle-check"></i> Pasos acertados: ${aciertosRejilla} &nbsp;|&nbsp; 
+      <i class="fa-solid fa-circle-xmark"></i> Errores: ${erroresRejilla}
+    </p>
   `;
 
   lanzarConfetiRejilla();
