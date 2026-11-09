@@ -1,0 +1,410 @@
+/* css/soles.css - Estilos visuales de Los Soles ABN */
+@import url('theme.css');
+
+/* Selector de modo (Guiado vs Libre) */
+.mode-selector-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.mode-card {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  text-align: left;
+  color: #1e293b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mode-card:hover {
+  border-color: #ffb300;
+  background: #fffdf5;
+}
+
+.mode-card.active {
+  border-color: #ff8f00;
+  background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
+  box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.25);
+}
+
+.mode-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffca28, #ff8f00);
+  color: #fff;
+  font-size: 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mode-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mode-text strong {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: #4a148c;
+}
+
+.mode-text span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #57534e;
+  line-height: 1.35;
+}
+
+/* Controles de nivel y acciones */
+.sol-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  background: #faf9fe;
+  border: 2px solid #e6dff7;
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+
+.sol-control-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sol-control-item label {
+  font-weight: 800;
+  color: #4527a0;
+}
+
+.sol-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.custom-sol-panel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: #fffdf2;
+  border: 2px solid #ffe082;
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+
+.custom-sol-panel label {
+  font-weight: 800;
+  color: #5d4037;
+}
+
+.custom-sol-panel input {
+  width: 110px;
+  text-align: center;
+}
+
+/* Barra de progreso de rayos */
+.sol-progress-wrap {
+  margin-bottom: 18px;
+}
+
+.sol-progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 800;
+  color: #4527a0;
+  margin-bottom: 6px;
+}
+
+.sol-progress-bar {
+  width: 100%;
+  height: 16px;
+  background: #fff3e0;
+  border: 1px solid #ffe082;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.sol-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ffca28, #ff8f00);
+  transition: width 0.3s ease;
+}
+
+.sol-helper-tip {
+  margin: 10px 0 0 0;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.94rem;
+  text-align: center;
+  color: #334155;
+}
+
+/* Tablero del Sol ABN */
+.sol-stage {
+  background: radial-gradient(circle at center, #fffde7 0%, #fff8e1 45%, #f3e5f5 100%);
+  border: 2px solid #ffe082;
+  border-radius: 22px;
+  padding: 26px 18px;
+}
+
+.sun-board {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 22px;
+}
+
+.rays-column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Centro del Sol */
+.sun-center-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.sun-core {
+  width: 175px;
+  height: 175px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffee58, #fbc02d 65%, #f57f17 100%);
+  border: 6px solid #fff59d;
+  box-shadow: 0 0 0 10px rgba(255, 193, 7, 0.25), 0 0 35px rgba(255, 160, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  animation: pulseSun 3s infinite ease-in-out;
+}
+
+.sun-core.sun-complete {
+  box-shadow: 0 0 0 14px rgba(255, 213, 79, 0.45), 0 0 50px rgba(255, 143, 0, 0.8);
+}
+
+@keyframes pulseSun {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+.sun-face {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.sun-number {
+  font-family: var(--font-heading);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #3e2723;
+  line-height: 1.05;
+}
+
+.sun-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #5d4037;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-top: 2px;
+}
+
+/* Tarjetas de cada rayo */
+.ray-card {
+  position: relative;
+  background: #ffffff;
+  border: 2px solid #ffe082;
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  box-shadow: 0 4px 10px rgba(255, 179, 0, 0.12);
+  transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.ray-card:focus-within {
+  border-color: #ff8f00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 143, 0, 0.22);
+}
+
+.ray-card.ray-solved {
+  background: linear-gradient(135deg, #fffde7 0%, #e8f5e9 100%);
+  border-color: #66bb6a;
+}
+
+.ray-badge {
+  background: #fff8e1;
+  color: #e65100;
+  border: 1px solid #ffe082;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 4px 9px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ray-card.ray-solved .ray-badge {
+  background: #ffca28;
+  color: #3e2723;
+}
+
+.ray-operation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.ray-text {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+}
+
+.ray-input-guided {
+  width: 72px;
+  padding: 6px 8px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.ray-input-free {
+  width: 100%;
+  max-width: 170px;
+  padding: 7px 10px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.ray-status {
+  width: 24px;
+  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Mensaje final del Sol */
+.sol-mensaje-final {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #fff8e1, #e8f5e9);
+  border: 2px solid #fbc02d;
+  border-radius: 16px;
+  padding: 24px 18px;
+  text-align: center;
+}
+
+.sun-trophy {
+  font-size: 2.6rem;
+  margin-bottom: 8px;
+}
+
+.sol-mensaje-final h2 {
+  color: #e65100;
+  margin: 0 0 8px 0;
+}
+
+.sol-mensaje-final p {
+  color: #2e7d32;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
+
+/* Responsivo: en pantallas móviles el Sol se coloca arriba y los rayos debajo */
+@media (max-width: 820px) {
+  .sun-board {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .sun-center-wrapper {
+    order: -1;
+  }
+
+  .sun-core {
+    width: 140px;
+    height: 140px;
+  }
+
+  .sun-number {
+    font-size: 2.1rem;
+  }
+
+  .rays-column {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sol-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sol-actions {
+    width: 100%;
+  }
+
+  .sol-actions button {
+    flex: 1;
+  }
+
+  .sol-stage {
+    padding: 16px 10px;
+  }
+
+  .ray-card {
+    padding: 8px 10px;
+  }
+
+  .ray-text {
+    font-size: 1.1rem;
+  }
+
+  .ray-input-guided {
+    width: 64px;
+    font-size: 1.08rem;
+  }
+}
+

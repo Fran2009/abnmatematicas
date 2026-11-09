@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Método ABN - Los Soles ABN</title>
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/soles.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/cookie-modal.css">
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fa-solid fa-sun" style="color: #ffb300;"></i> Los Soles ABN</h1>
+
+    <div class="intro-banner">
+      <p>
+        <strong>¿Qué es el Sol ABN?</strong> En el centro del sol hay un número protagonista y a su alrededor salen <strong>8 rayos</strong>. Tu misión es iluminar todos los rayos haciendo que el resultado de cada rayo sea siempre el número del centro del sol.
+      </p>
+    </div>
+
+    <!-- Selector de Modo: Guiado vs Libre -->
+    <div class="mode-selector-wrap">
+      <button type="button" class="mode-card active" id="btnModoGuiado" onclick="cambiarModoSol('guiado')">
+        <div class="mode-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
+        <div class="mode-text">
+          <strong>Modo Guiado (Completar hueco)</strong>
+          <span>Ideal para empezar: completa el número que falta en cada rayo (ej. 10 + <u>?</u>)</span>
+        </div>
+      </button>
+
+      <button type="button" class="mode-card" id="btnModoLibre" onclick="cambiarModoSol('libre')">
+        <div class="mode-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <div class="mode-text">
+          <strong>Modo Libre (Inventa tus rayos)</strong>
+          <span>Escribe tú mismo sumas, restas o multiplicaciones distintas (ej. 20+5, 30-5)</span>
+        </div>
+      </button>
+    </div>
+
+    <!-- Barra de configuración -->
+    <div class="sol-controls">
+      <div class="sol-control-item">
+        <label for="nivelSol"><i class="fa-solid fa-layer-group"></i> Nivel:</label>
+        <select id="nivelSol">
+          <option value="1">Nivel 1 · Sol hasta 10</option>
+          <option value="2" selected>Nivel 2 · Sol hasta 20</option>
+          <option value="3">Nivel 3 · Sol hasta 50</option>
+          <option value="4">Nivel 4 · Sol hasta 100</option>
+          <option value="5">Nivel 5 · Sol hasta 500</option>
+          <option value="6">Nivel 6 · Sol hasta 1.000</option>
+        </select>
+      </div>
+
+      <div class="sol-actions">
+        <button type="button" class="btn-warm" onclick="generarSolAleatorio()">
+          <i class="fa-solid fa-sun"></i> Nuevo Sol Aleatorio
+        </button>
+        <button type="button" class="btn-secondary" onclick="toggleInputPersonalizadoSol()">
+          <i class="fa-solid fa-pen"></i> Elegir Número del Sol
+        </button>
+      </div>
+    </div>
+
+    <!-- Input para elegir el número del centro manualmente -->
+    <div id="customSolContainer" class="custom-sol-panel" style="display: none;">
+      <label for="inputNumeroSol">Número para el centro del Sol:</label>
+      <input type="number" id="inputNumeroSol" min="2" max="99999" placeholder="Ej: 25">
+      <button type="button" onclick="generarSolPersonalizado()">
+        <i class="fa-solid fa-check"></i> Crear Sol
+      </button>
+    </div>
+
+    <!-- Barra de progreso de rayos iluminados -->
+    <div id="solProgressWrap" class="sol-progress-wrap" style="display: none;">
+      <div class="sol-progress-info">
+        <span><i class="fa-solid fa-bolt" style="color:#ffb300;"></i> Rayos iluminados</span>
+        <span id="solProgressText">0 de 8</span>
+      </div>
+      <div class="sol-progress-bar">
+        <div id="solProgressFill" class="sol-progress-fill"></div>
+      </div>
+      <p id="solHelperTip" class="sol-helper-tip"></p>
+    </div>
+
+    <!-- Escenario del Sol ABN -->
+    <div id="solStage" class="sol-stage" style="display: none;">
+      <div class="sun-board">
+        <!-- Columna izquierda de rayos (Rayos 1 a 4) -->
+        <div class="rays-column rays-left" id="raysLeft"></div>
+
+        <!-- Centro del Sol -->
+        <div class="sun-center-wrapper">
+          <div class="sun-core" id="sunCore">
+            <div class="sun-face" id="sunFace">😊</div>
+            <div class="sun-number" id="sunTargetNumber">20</div>
+            <div class="sun-label">Número Sol</div>
+          </div>
+        </div>
+
+        <!-- Columna derecha de rayos (Rayos 5 a 8) -->
+        <div class="rays-column rays-right" id="raysRight"></div>
+      </div>
+    </div>
+
+    <!-- Mensaje final cuando todos los rayos están encendidos -->
+    <div id="solMensajeFinal" class="sol-mensaje-final" style="display: none;">
+      <div class="sun-trophy">☀️🏆☀️</div>
+      <h2>¡Has iluminado todo el Sol ABN!</h2>
+      <p id="solResumenFinal">Has completado los 8 rayos del número correctamente.</p>
+      <button type="button" class="btn-warm" onclick="generarSolAleatorio()">
+        <i class="fa-solid fa-rotate-right"></i> Jugar con otro Sol
+      </button>
+    </div>
+  </div>
+
+  <div id="cookie-modal-container"></div>
+
+  <script src="js/soles.js?v=1.0.1"></script>
+  <script src="js/navbar.js?v=1.0.5"></script>
+  <script src="js/footer.js?v=1.0.4"></script>
+  <script src="js/cookie-modal.js?v=1.0.3"></script>
+  <script src="js/analytics.js?v=1.0.3"></script>
+</body>
+</html>
+

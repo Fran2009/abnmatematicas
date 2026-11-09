@@ -1,0 +1,207 @@
+/* css/theme.css - Sistema de diseño moderno e infantil para Método ABN */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap');
+
+:root {
+  --abn-primary: #673ab7;
+  --abn-primary-dark: #512da8;
+  --abn-primary-light: #ede7f6;
+  --abn-secondary: #ff9800;
+  --abn-sun: #ffb300;
+  --abn-sun-light: #fff8e1;
+  --abn-success: #2e7d32;
+  --abn-success-bg: #dcedc8;
+  --abn-success-border: #66bb6a;
+  --abn-error: #c62828;
+  --abn-error-bg: #ffcdd2;
+  --abn-error-border: #ef5350;
+  --abn-blue: #0288d1;
+  --abn-blue-light: #e1f5fe;
+  --abn-pink: #d81b60;
+  --abn-pink-light: #fce4ec;
+  --abn-teal: #00897b;
+  --abn-teal-light: #e0f2f1;
+  --abn-bg-gradient: linear-gradient(135deg, #f3e5f5 0%, #e1f5fe 50%, #fff9c4 100%);
+  --abn-card-shadow: 0 10px 28px rgba(103, 58, 183, 0.10), 0 2px 6px rgba(0, 0, 0, 0.05);
+  --abn-radius-lg: 20px;
+  --abn-radius-md: 14px;
+  --abn-radius-sm: 10px;
+  --font-heading: 'Fredoka', 'Nunito', sans-serif;
+  --font-body: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--abn-bg-gradient);
+  background-attachment: fixed;
+  color: #2d3436;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: calc(100% - 24px);
+  max-width: 960px;
+  margin: 24px auto;
+  background-color: #ffffff;
+  padding: 28px 26px;
+  border-radius: var(--abn-radius-lg);
+  box-shadow: var(--abn-card-shadow);
+  border: 2px solid rgba(103, 58, 183, 0.12);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  letter-spacing: 0.3px;
+}
+
+h1 {
+  color: var(--abn-primary);
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 14px;
+  line-height: 1.25;
+}
+
+p {
+  line-height: 1.65;
+  color: #4a5568;
+  font-size: 1.02rem;
+}
+
+/* Botones modernos e infantiles */
+button,
+.btn {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #7e57c2, #5e35b1);
+  color: #ffffff;
+  box-shadow: 0 4px 0 #4527a0, 0 6px 12px rgba(94, 53, 177, 0.22);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  user-select: none;
+}
+
+button:hover,
+.btn:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+button:active,
+.btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #4527a0, 0 3px 6px rgba(94, 53, 177, 0.2);
+}
+
+button.btn-secondary,
+.btn-secondary {
+  background: linear-gradient(135deg, #ffffff, #f3f0ff);
+  color: var(--abn-primary-dark);
+  border: 2px solid #d1c4e9;
+  box-shadow: 0 4px 0 #b39ddb, 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+button.btn-secondary:hover,
+.btn-secondary:hover {
+  background: #ede7f6;
+}
+
+button.btn-warm,
+.btn-warm {
+  background: linear-gradient(135deg, #ffb300, #fb8c00);
+  color: #fff;
+  box-shadow: 0 4px 0 #e65100, 0 6px 12px rgba(251, 140, 0, 0.25);
+}
+
+select,
+input[type="number"],
+input[type="tel"],
+input[type="text"] {
+  font-family: var(--font-body);
+  font-weight: 700;
+  border: 2px solid #d1c4e9;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  color: #2d3436;
+  background-color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+  outline: none;
+}
+
+select:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="text"]:focus {
+  border-color: var(--abn-primary);
+  box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.18);
+}
+
+/* Estados globales de validación */
+.correcto {
+  background-color: #dcedc8 !important;
+  border-color: #4caf50 !important;
+  color: #1b5e20 !important;
+}
+
+.incorrecto {
+  background-color: #ffcdd2 !important;
+  border-color: #ef5350 !important;
+  color: #b71c1c !important;
+}
+
+/* Tarjeta de introducción amigable */
+.intro-banner {
+  background: linear-gradient(135deg, #f8f5ff 0%, #eef8ff 100%);
+  border: 2px solid #e1d5f8;
+  border-radius: var(--abn-radius-md);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.intro-banner p {
+  margin: 6px 0;
+  text-align: left;
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: calc(100% - 16px);
+    margin: 12px auto;
+    padding: 16px 12px;
+    border-radius: 16px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+
+  button,
+  .btn {
+    padding: 9px 15px;
+    font-size: 0.95rem;
+  }
+}
+

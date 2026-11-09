@@ -1,77 +1,217 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  margin: 0;
-  padding: 0;
-}
+/* css/index.css - Página principal moderna y adaptada a niños */
+@import url('theme.css');
 
-.container {
-  max-width: 800px;
-  margin: 50px auto;
-  background: #fff;
-  padding: 30px 20px;
-  border-radius: 10px;
+.home-container {
+  max-width: 960px;
   text-align: center;
 }
 
-h1 {
-  margin-bottom: 20px;
-  color: #673ab7;
+.hero-header {
+  background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 50%, #e1f5fe 100%);
+  border: 2px solid #d1c4e9;
+  border-radius: 18px;
+  padding: 24px 22px;
+  margin-bottom: 26px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffca28;
+  color: #4a148c;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.hero-header h1 {
+  margin: 6px 0 12px 0;
+  font-size: 2.2rem;
+  color: #4527a0;
 }
 
 .intro {
-  font-size: 16px;
-  margin-bottom: 30px;
-  color: #333;
+  font-size: 1.05rem;
+  margin: 0 auto;
+  max-width: 760px;
+  color: #374151;
   line-height: 1.6;
-  text-align: justify;
+  text-align: center;
 }
 
+.section-heading {
+  font-size: 1.35rem;
+  color: #512da8;
+  margin: 10px 0 18px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Grid de tarjetas de actividades */
 .sections {
   list-style: none;
   padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+  gap: 18px;
 }
 
 .sections li {
-  margin: 15px 0;
+  margin: 0;
+  display: flex;
 }
 
-.sections a {
-  display: inline-block;
+.activity-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
   text-decoration: none;
-  color: #673ab7;
-  font-size: 20px;
-  border: 2px solid #673ab7;
-  padding: 10px 20px;
-  border-radius: 5px;
-  transition: background-color 0.3s, color 0.3s;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 20px;
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
-.sections a:hover {
-  background-color: #673ab7;
-  color: white;
+.activity-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(103, 58, 183, 0.14);
 }
 
-footer {
-  margin-top: 40px;
-  text-align: center;
-  font-size: 14px;
-  color: #777;
-  padding: 15px 0;
+.badge-new {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #ff7043, #f4511e);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(244, 81, 30, 0.3);
 }
 
-footer a {
-  color: #333;
-  margin-left: 5px;
+.card-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+
+.card-body h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.25rem;
+  color: #1f2937;
+}
+
+.card-body p {
+  margin: 0 0 14px 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.45;
+}
+
+.card-cta {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  margin-top: auto;
+}
+
+/* Colores temáticos por tarjeta */
+.card-blue { border-color: #b3e5fc; background: linear-gradient(180deg, #ffffff 0%, #f4fbff 100%); }
+.card-blue .card-icon { background: #e1f5fe; color: #0288d1; }
+.card-blue .card-cta { background: #e1f5fe; color: #0277bd; }
+.card-blue:hover { border-color: #29b6f6; }
+
+.card-purple { border-color: #d1c4e9; background: linear-gradient(180deg, #ffffff 0%, #f9f6ff 100%); }
+.card-purple .card-icon { background: #ede7f6; color: #673ab7; }
+.card-purple .card-cta { background: #ede7f6; color: #512da8; }
+.card-purple:hover { border-color: #7e57c2; }
+
+.card-sun { border-color: #ffe082; background: linear-gradient(180deg, #ffffff 0%, #fffdf2 100%); }
+.card-sun .card-icon { background: #fff8e1; color: #ff8f00; }
+.card-sun .card-cta { background: #fff8e1; color: #ef6c00; }
+.card-sun:hover { border-color: #ffb300; }
+
+.card-green { border-color: #c8e6c9; background: linear-gradient(180deg, #ffffff 0%, #f4fbf5 100%); }
+.card-green .card-icon { background: #e8f5e9; color: #2e7d32; }
+.card-green .card-cta { background: #e8f5e9; color: #1b5e20; }
+.card-green:hover { border-color: #66bb6a; }
+
+.card-pink { border-color: #f8bbd0; background: linear-gradient(180deg, #ffffff 0%, #fff5f8 100%); }
+.card-pink .card-icon { background: #fce4ec; color: #d81b60; }
+.card-pink .card-cta { background: #fce4ec; color: #ad1457; }
+.card-pink:hover { border-color: #ec407a; }
+
+.card-teal { border-color: #b2dfdb; background: linear-gradient(180deg, #ffffff 0%, #f2fbf9 100%); }
+.card-teal .card-icon { background: #e0f2f1; color: #00897b; }
+.card-teal .card-cta { background: #e0f2f1; color: #00695c; }
+.card-teal:hover { border-color: #26a69a; }
+
+.open-source-note {
+  margin-top: 26px;
+  padding: 12px 16px;
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.open-source-note a {
+  color: var(--abn-primary);
+  font-weight: 700;
   text-decoration: none;
 }
 
-footer a:hover {
-  color: #000;
+.open-source-note a:hover {
+  text-decoration: underline;
 }
 
-.intro:last-of-type {
-  font-size: 15px;
-  color: #555;
-  margin-top: 15px;
+@media (max-width: 600px) {
+  .hero-header {
+    padding: 18px 14px;
+  }
+
+  .hero-header h1 {
+    font-size: 1.65rem;
+  }
+
+  .sections {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .activity-card {
+    padding: 16px;
+  }
 }

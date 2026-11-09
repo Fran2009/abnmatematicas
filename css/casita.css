@@ -1,123 +1,167 @@
-/* casita.css */
+/* css/casita.css - Casita de Descomposición moderna y adaptable */
+@import url('theme.css');
 
-/* Ajustes generales */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+.casita-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  background: #faf9fe;
+  border: 2px solid #e6dff7;
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  background-color: #f5f5f5;
+.casita-control-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
+.casita-control-item label {
+  font-weight: 800;
+  color: #4527a0;
 }
 
-h1 {
-  text-align: center;
+.casita-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.custom-casita-panel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 14px 18px;
+  background-color: #fffdf4;
+  border: 2px solid #ffe082;
+  border-radius: 14px;
+}
+
+.custom-casita-panel label {
+  font-weight: 800;
+  color: #5d4037;
 }
 
 /* Contenedor de la casita */
 #casitaContainer {
   margin-top: 20px;
-  display: block;
   text-align: center;
+}
+
+.casita-scroll-wrap {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 8px;
 }
 
 /* Tabla de la casita */
 #tablaCasita {
   margin: 0 auto;
   border-collapse: collapse;
-  border: 2px solid #673ab7;
+  border: 3px solid #673ab7;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(103, 58, 183, 0.12);
 }
 
 /* Fila del tejado y encabezado */
 #casitaHead th {
-  border: 1px solid #673ab7;
-  padding: 6px;
-  background-color: #b39ddb;
-  color: #000;
+  border: 2px solid #673ab7;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, #d1c4e9 0%, #b39ddb 100%);
+  color: #311b92;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
   text-align: center;
 }
 
-/* Celda del tejado: ocupa sólo las columnas de cifras */
+/* Celda del tejado */
 .roof-cell {
-  background: none;
+  background: none !important;
+  border: none !important;
   position: relative;
   text-align: center;
+  padding: 0 !important;
 }
 
-/* Triángulo del tejado que se adapta al ancho de las columnas de cifras */
+/* Triángulo del tejado */
 .roof {
   width: 100%;
-  height: var(--roof-height, 40px);
-  background-color: #673ab7;
-  /* Creamos un triángulo con clip-path */
+  min-height: 64px;
+  height: var(--roof-height, 64px);
+  background: linear-gradient(180deg, #ff7043 0%, #d84315 100%);
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   position: relative;
   margin: 0 auto;
 }
 
-/* Posiciona el texto en la base del triángulo */
 .roof-text {
   position: absolute;
-  bottom: 0; /* en la base */
+  bottom: 4px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 24px;
-  font-weight: bold;
-  color: white;
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 /* Celdas del cuerpo */
 #casitaBody td {
-  border: 1px solid #673ab7;
+  border: 2px solid #b39ddb;
   padding: 8px;
-  min-width: 40px;
+  min-width: 52px;
   text-align: center;
+  background: #fcfaff;
 }
 
 /* Inputs en las celdas */
 #casitaBody input {
-  width: 60px;
+  width: 68px;
   text-align: center;
-  font-size: 16px;
-  padding: 4px; /* Margen interno para que el texto no quede pegado al borde */
-  transition: background-color 0.3s, width 0.3s;
-}
-
-/* Estados de validación */
-.correcto {
-  background-color: #c8f7c5; /* Verde claro */
-}
-
-.incorrecto {
-  background-color: #f7c5c5; /* Rojo claro */
+  font-size: 1.1rem;
+  font-weight: 800;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background-color 0.25s, width 0.25s;
 }
 
 /* Responsivo: ajustes para pantallas pequeñas */
 @media (max-width: 600px) {
-  .container {
-    padding: 10px;
-    margin: 10px;
+  .casita-controls {
+    flex-direction: column;
+    align-items: stretch;
   }
-  #tablaCasita th,
+
+  .casita-actions {
+    width: 100%;
+  }
+
+  .casita-actions button {
+    flex: 1;
+  }
+
+  #casitaHead th,
   #casitaBody td {
-    padding: 4px;
-    min-width: 30px;
+    padding: 5px 4px;
+    min-width: 36px;
   }
+
   #casitaBody input {
-    width: 45px;
-    font-size: 14px;
+    width: 48px;
+    font-size: 0.95rem;
+    padding: 4px;
+  }
+
+  .roof-text {
+    font-size: 1.3rem;
   }
 }
-
-

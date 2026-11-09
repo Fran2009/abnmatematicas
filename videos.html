@@ -4,60 +4,235 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Método ABN - Vídeos de Ejemplos</title>
-  <link rel="stylesheet" href="css/video.css">
+  <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/video.css">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="css/cookie-modal.css">
 </head>
 <body>
   <div class="container">
-    <h1>Vídeos de Ejemplos</h1>
-    <p>
-      En esta sección encontrarás vídeos ilustrativos para aprender a utilizar el método ABN de forma sencilla y visual. Estos recursos están pensados para familias, docentes y estudiantes que deseen conocer y aplicar esta metodología.
-    </p>
+    <h1><i class="fa-solid fa-circle-play" style="color: #00897b;"></i> Vídeos de Ejemplos ABN</h1>
+    <div class="intro-banner">
+      <p>
+        Aquí encontrarás vídeos explicativos organizados por temas para aprender paso a paso todas las actividades del <strong>Método ABN</strong>: desde la Tabla del 100, la Casita y los Soles de descomposición, hasta las escaleras, igualación, comparación, sumirrestas y multiplicaciones.
+      </p>
+    </div>
 
-    <div class="video-gallery">
-      <!-- Video 1 -->
-      <a href="https://www.youtube.com/watch?v=Hf4VY7LArEA" target="_blank" class="video-item">
-        <img src="https://img.youtube.com/vi/Hf4VY7LArEA/hqdefault.jpg" alt="Sumas en la tabla del 100">
+    <!-- Filtros rápidos por categoría -->
+    <div class="video-filters" role="tablist" aria-label="Filtrar vídeos por tema">
+      <button type="button" class="filter-btn active" onclick="filtrarVideos('todos', this)">
+        <i class="fa-solid fa-border-all"></i> Todos
+      </button>
+      <button type="button" class="filter-btn" onclick="filtrarVideos('numeracion', this)">
+        <i class="fa-solid fa-table-cells"></i> Tabla del 100
+      </button>
+      <button type="button" class="filter-btn" onclick="filtrarVideos('descomposicion', this)">
+        <i class="fa-solid fa-sun"></i> Casita y Soles
+      </button>
+      <button type="button" class="filter-btn" onclick="filtrarVideos('rejilla-basica', this)">
+        <i class="fa-solid fa-plus-minus"></i> Sumas y Restas
+      </button>
+      <button type="button" class="filter-btn" onclick="filtrarVideos('escaleras-igualacion', this)">
+        <i class="fa-solid fa-stairs"></i> Escaleras e Igualación
+      </button>
+      <button type="button" class="filter-btn" onclick="filtrarVideos('triples', this)">
+        <i class="fa-solid fa-shuffle"></i> Sumirresta y Dobles
+      </button>
+      <button type="button" class="filter-btn" onclick="filtrarVideos('multiplicacion', this)">
+        <i class="fa-solid fa-xmark"></i> Multiplicaciones
+      </button>
+    </div>
+
+    <div class="video-gallery" id="videoGallery">
+      <!-- 1. Numeración y Tabla del 100 -->
+      <a href="https://www.youtube.com/watch?v=Hf4VY7LArEA" target="_blank" class="video-item" data-cat="numeracion">
+        <div class="video-thumb">
+          <span class="video-tag tag-blue">Tabla del 100</span>
+          <img src="https://img.youtube.com/vi/Hf4VY7LArEA/hqdefault.jpg" alt="Sumas en la tabla del 100" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
         <span>Sumas en la tabla del 100</span>
       </a>
 
-      <!-- Video 2 -->
-      <a href="https://www.youtube.com/watch?v=B35TIuCGT28" target="_blank" class="video-item">
-        <img src="https://img.youtube.com/vi/B35TIuCGT28/hqdefault.jpg" alt="Restas en la tabla del 100">
+      <a href="https://www.youtube.com/watch?v=B35TIuCGT28" target="_blank" class="video-item" data-cat="numeracion">
+        <div class="video-thumb">
+          <span class="video-tag tag-blue">Tabla del 100</span>
+          <img src="https://img.youtube.com/vi/B35TIuCGT28/hqdefault.jpg" alt="Restas en la tabla del 100" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
         <span>Restas en la tabla del 100</span>
       </a>
 
-      <!-- Video 3 -->
-      <a href="https://www.youtube.com/watch?v=3neSQSY-5AI" target="_blank" class="video-item">
-        <img src="https://img.youtube.com/vi/3neSQSY-5AI/hqdefault.jpg" alt="Casita de descomposición">
+      <a href="https://www.youtube.com/watch?v=-XD5gTEbDkg" target="_blank" class="video-item" data-cat="numeracion">
+        <div class="video-thumb">
+          <span class="video-tag tag-blue">Numeración</span>
+          <img src="https://img.youtube.com/vi/-XD5gTEbDkg/hqdefault.jpg" alt="Conocimiento de la tabla del 100" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Descubriendo la tabla del 100</span>
+      </a>
+
+      <!-- 2. Casita y Soles de Descomposición -->
+      <a href="https://www.youtube.com/watch?v=3neSQSY-5AI" target="_blank" class="video-item" data-cat="descomposicion">
+        <div class="video-thumb">
+          <span class="video-tag tag-purple">Casita ABN</span>
+          <img src="https://img.youtube.com/vi/3neSQSY-5AI/hqdefault.jpg" alt="Casita de descomposición" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
         <span>Casita de descomposición</span>
       </a>
 
-      <!-- Video 4 -->
-      <a href="https://www.youtube.com/watch?v=nEJzDUNdGn4" target="_blank" class="video-item">
-        <img src="https://img.youtube.com/vi/nEJzDUNdGn4/hqdefault.jpg" alt="Sumas en rejilla">
+      <a href="https://www.youtube.com/watch?v=VixD_7c6nNI" target="_blank" class="video-item" data-cat="descomposicion">
+        <div class="video-thumb">
+          <span class="video-tag tag-sun">Soles ABN</span>
+          <img src="https://img.youtube.com/vi/VixD_7c6nNI/hqdefault.jpg" alt="Soles y descomposición de números ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Soles y composición de números</span>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=hQ3TUsA2T6s" target="_blank" class="video-item" data-cat="descomposicion">
+        <div class="video-thumb">
+          <span class="video-tag tag-sun">Soles ABN</span>
+          <img src="https://img.youtube.com/vi/hQ3TUsA2T6s/hqdefault.jpg" alt="Descomposición flexible de números ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Descomposición en múltiples formas (Sol)</span>
+      </a>
+
+      <!-- 3. Sumas y Restas en Rejilla -->
+      <a href="https://www.youtube.com/watch?v=nEJzDUNdGn4" target="_blank" class="video-item" data-cat="rejilla-basica">
+        <div class="video-thumb">
+          <span class="video-tag tag-green">Rejilla Básica</span>
+          <img src="https://img.youtube.com/vi/nEJzDUNdGn4/hqdefault.jpg" alt="Sumas en rejilla" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
         <span>Sumas en rejilla</span>
       </a>
 
-      <!-- Video 5 -->
-      <a href="https://www.youtube.com/watch?v=cDfGbokjivs" target="_blank" class="video-item">
-        <img src="https://img.youtube.com/vi/cDfGbokjivs/hqdefault.jpg" alt="Restas en rejilla 1">
-        <span>Restas en rejilla 1</span>
+      <a href="https://www.youtube.com/watch?v=cDfGbokjivs" target="_blank" class="video-item" data-cat="rejilla-basica">
+        <div class="video-thumb">
+          <span class="video-tag tag-green">Rejilla Básica</span>
+          <img src="https://img.youtube.com/vi/cDfGbokjivs/hqdefault.jpg" alt="Restas en rejilla 1" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Iniciación a la resta en rejilla</span>
       </a>
 
-      <!-- Video 6 -->
-      <a href="https://www.youtube.com/watch?v=mVIzT5o8Awc" target="_blank" class="video-item">
-        <img src="https://img.youtube.com/vi/mVIzT5o8Awc/hqdefault.jpg" alt="Restas en rejilla 2">
-        <span>Restas en rejilla 2</span>
+      <a href="https://www.youtube.com/watch?v=mVIzT5o8Awc" target="_blank" class="video-item" data-cat="rejilla-basica">
+        <div class="video-thumb">
+          <span class="video-tag tag-green">Rejilla Básica</span>
+          <img src="https://img.youtube.com/vi/mVIzT5o8Awc/hqdefault.jpg" alt="Restas en rejilla 2" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Restas por detracción en rejilla</span>
+      </a>
+
+      <!-- 4. Escaleras, Igualación y Detracción con Comparación -->
+      <a href="https://www.youtube.com/watch?v=G_-3WH-Eli0" target="_blank" class="video-item" data-cat="escaleras-igualacion">
+        <div class="video-thumb">
+          <span class="video-tag tag-teal">Escalera ABN</span>
+          <img src="https://img.youtube.com/vi/G_-3WH-Eli0/hqdefault.jpg" alt="Restas por escalera ascendente ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Escalera ascendente y descendente en rejilla</span>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=XCozbnM6DiA" target="_blank" class="video-item" data-cat="escaleras-igualacion">
+        <div class="video-thumb">
+          <span class="video-tag tag-teal">Escalera ABN</span>
+          <img src="https://img.youtube.com/vi/XCozbnM6DiA/hqdefault.jpg" alt="Escalera y comparación en rejilla ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Resta en escalera y comparación</span>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=mhjO3heDLNM" target="_blank" class="video-item" data-cat="escaleras-igualacion">
+        <div class="video-thumb">
+          <span class="video-tag tag-sun">Igualación</span>
+          <img src="https://img.youtube.com/vi/mhjO3heDLNM/hqdefault.jpg" alt="Igualación en el método ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Igualación de cantidades ABN</span>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=A0JzEp_OJYE" target="_blank" class="video-item" data-cat="escaleras-igualacion">
+        <div class="video-thumb">
+          <span class="video-tag tag-pink">Comparación</span>
+          <img src="https://img.youtube.com/vi/A0JzEp_OJYE/hqdefault.jpg" alt="Detracción con comparación ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Detracción con comparación ABN</span>
+      </a>
+
+      <!-- 5. Operaciones de 3 Números: Sumirresta y Doble Resta / Suma -->
+      <a href="https://www.youtube.com/watch?v=54nc6tIhpuY" target="_blank" class="video-item" data-cat="triples">
+        <div class="video-thumb">
+          <span class="video-tag tag-indigo">Sumirresta</span>
+          <img src="https://img.youtube.com/vi/54nc6tIhpuY/hqdefault.jpg" alt="Sumirresta en el método ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Cómo hacer la Sumirresta ABN</span>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=dyyGnhUnV-I" target="_blank" class="video-item" data-cat="triples">
+        <div class="video-thumb">
+          <span class="video-tag tag-red">Doble Resta</span>
+          <img src="https://img.youtube.com/vi/dyyGnhUnV-I/hqdefault.jpg" alt="Doble resta en el método ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Doble resta en rejilla ABN</span>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=TrQl4jHL_x8" target="_blank" class="video-item" data-cat="triples">
+        <div class="video-thumb">
+          <span class="video-tag tag-indigo">3 Números</span>
+          <img src="https://img.youtube.com/vi/TrQl4jHL_x8/hqdefault.jpg" alt="Práctica de Sumirresta ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Ejemplos prácticos de Sumirresta</span>
+      </a>
+
+      <!-- 6. Multiplicaciones ABN -->
+      <a href="https://www.youtube.com/watch?v=4em_kpii29M" target="_blank" class="video-item" data-cat="multiplicacion">
+        <div class="video-thumb">
+          <span class="video-tag tag-pink">Multiplicar</span>
+          <img src="https://img.youtube.com/vi/4em_kpii29M/hqdefault.jpg" alt="Multiplicación en el método ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Multiplicación en rejilla ABN</span>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=g9xX7yu62Wk" target="_blank" class="video-item" data-cat="multiplicacion">
+        <div class="video-thumb">
+          <span class="video-tag tag-pink">Tablas ABN</span>
+          <img src="https://img.youtube.com/vi/g9xX7yu62Wk/hqdefault.jpg" alt="Trucos para multiplicar con las manos ABN" loading="lazy">
+          <span class="play-badge"><i class="fa-solid fa-play"></i></span>
+        </div>
+        <span>Trucos de las tablas de multiplicar ABN</span>
       </a>
     </div>
   </div>
   <div id="cookie-modal-container"></div>
-  <script src="js/navbar.js?v=1.0.0"></script>
-  <script src="js/footer.js?v=1.0.1"></script>
+
+  <script>
+    function filtrarVideos(categoria, btnEl) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      document.querySelectorAll('#videoGallery .video-item').forEach(item => {
+        if (categoria === 'todos' || item.getAttribute('data-cat') === categoria) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+  <script src="js/navbar.js?v=1.0.5"></script>
+  <script src="js/footer.js?v=1.0.4"></script>
   <script src="js/cookie-modal.js?v=1.0.0"></script>
   <script src="js/analytics.js?v=1.0.0"></script>
 </body>

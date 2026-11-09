@@ -3,63 +3,228 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Método ABN - Rejilla de suma y resta</title>
-  <link rel="stylesheet" href="css/rejilla.css">
+  <title>Método ABN - Rejilla Interactiva</title>
+  <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/rejilla.css">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="css/cookie-modal.css">
 </head>
 <body>
   <div class="container">
-    <h1>Método ABN - Rejilla de suma y resta</h1>
-    <p>
-      La rejilla en el Método ABN es una herramienta visual que facilita la comprensión de sumas y restas al descomponer los números según sus valores posicionales (unidades, decenas, centenas, etc.). Los números se colocan en filas y columnas dentro de la rejilla, y se operan por partes, lo que permite realizar los cálculos de forma más lógica y flexible. Este enfoque ayuda a los estudiantes a visualizar el proceso y desarrollar una mayor comprensión de las operaciones.
-    </p>
-    <p>
-      Para empezar, puedes seleccionar el nivel, el tipo de operación (incluyendo operaciones de 3 variables como doble suma, doble resta o sumiresta) y hacer clic en <strong>"Aleatorio"</strong>, o bien pulsar en <strong>"Personalizado"</strong> para introducir tú mismo los números con los que quieres operar. A continuación, completa cada casilla de la rejilla; si las cantidades ingresadas son correctas, aparecerá una nueva línea automáticamente. Continúa así hasta alcanzar el resultado final. Ejemplo: en 14 + 12, si pasamos una decena, la cantidad a descomponer es 10, el acumulado será 24, y el resto 2, apareciendo entonces la siguiente línea. ¡Buena suerte!
-    </p>
-    <label for="nivel">Nivel:</label>
-    <select id="nivel">
-      <option value="1">Nivel 1 (Hasta 50)</option>
-      <option value="2">Nivel 2 (Hasta 100)</option>
-      <option value="3">Nivel 3 (Hasta 500)</option>
-      <option value="4">Nivel 4 (Hasta 1000)</option>
-      <option value="5">Nivel 5 (Hasta 5000)</option>
-      <option value="6">Nivel 6 (Hasta 10000)</option>
-    </select>
-    <label for="operacion" style="margin-left:20px;">Operación:</label>
-    <select id="operacion" onchange="toggleTercerNumeroPersonalizado()">
-      <option value="suma">Suma</option>
-      <option value="resta">Resta</option>
-      <option value="doblesuma">Doble Suma</option>
-      <option value="dobleresta">Doble Resta</option>
-      <option value="sumiresta">Sumiresta</option>
-    </select>
-    <br>
-    <div style="margin-top: 15px;">
-      <button onclick="iniciarEjercicio()">Aleatorio</button>
-      <button onclick="mostrarInputPersonalizadoRejilla()">Personalizado</button>
+    <h1><i class="fa-solid fa-border-all"></i> La Rejilla ABN</h1>
+
+    <div class="intro-banner">
+      <p>
+        <strong>¿Qué es la Rejilla ABN?</strong> Es una tabla mágica donde resolvemos operaciones paso a paso y a nuestro ritmo. No hay una única forma de hacerlo: tú decides qué cantidad pasar en cada fila hasta llegar a la meta.
+      </p>
     </div>
 
-    <div id="customInputContainerRejilla" style="display: none; margin-top: 15px; padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
-      <label for="num1Personalizado" style="font-weight: bold;">Número 1:</label>
-      <input type="number" id="num1Personalizado" min="0" style="width: 80px; padding: 8px; margin: 0 15px 0 5px; border-radius: 4px; border: 1px solid #ccc; font-size: 16px;">
-      <label for="num2Personalizado" style="font-weight: bold;">Número 2:</label>
-      <input type="number" id="num2Personalizado" min="0" style="width: 80px; padding: 8px; margin: 0 15px 0 5px; border-radius: 4px; border: 1px solid #ccc; font-size: 16px;">
-      <div id="contenedorNum3" style="display: none;">
-        <label for="num3Personalizado" style="font-weight: bold;">Número 3:</label>
-        <input type="number" id="num3Personalizado" min="0" style="width: 80px; padding: 8px; margin: 0 15px 0 5px; border-radius: 4px; border: 1px solid #ccc; font-size: 16px;">
+    <!-- Paso 1: Elegir tipo de operación de forma visual e intuitiva -->
+    <div class="step-section">
+      <div class="step-header">
+        <span class="step-number">1</span>
+        <h2>Elige qué tipo de operación quieres practicar</h2>
       </div>
-      <button onclick="iniciarEjercicioPersonalizado()" style="margin-top: 10px; display: block;">Generar</button>
+
+      <!-- Pestañas de categorías para no abrumar al niño -->
+      <div class="category-tabs" role="tablist">
+        <button type="button" class="cat-tab active" data-cat="basicas" onclick="cambiarCategoriaRejilla('basicas')">
+          <i class="fa-solid fa-star"></i> Básicas
+        </button>
+        <button type="button" class="cat-tab" data-cat="comparacion" onclick="cambiarCategoriaRejilla('comparacion')">
+          <i class="fa-solid fa-stairs"></i> Escaleras e Igualación
+        </button>
+        <button type="button" class="cat-tab" data-cat="triples" onclick="cambiarCategoriaRejilla('triples')">
+          <i class="fa-solid fa-layer-group"></i> 3 Números (Reto)
+        </button>
+      </div>
+
+      <!-- Tarjetas visuales de operación -->
+      <div class="op-cards-grid" id="opCardsGrid">
+        <!-- Categoría: Básicas -->
+        <button type="button" class="op-card active" data-op="suma" data-cat="basicas" onclick="seleccionarOperacionRejilla('suma')">
+          <div class="op-card-icon bg-green"><i class="fa-solid fa-plus"></i></div>
+          <div class="op-card-info">
+            <span class="op-card-title">Suma</span>
+            <span class="op-card-desc">Juntar dos cantidades pasando de una a otra</span>
+          </div>
+        </button>
+
+        <button type="button" class="op-card" data-op="resta" data-cat="basicas" onclick="seleccionarOperacionRejilla('resta')">
+          <div class="op-card-icon bg-orange"><i class="fa-solid fa-minus"></i></div>
+          <div class="op-card-info">
+            <span class="op-card-title">Resta (Detracción)</span>
+            <span class="op-card-desc">Quitar una cantidad poco a poco hasta dejar 0</span>
+          </div>
+        </button>
+
+        <!-- Categoría: Escaleras, Igualación y Comparación -->
+        <button type="button" class="op-card" data-op="escalera_asc" data-cat="comparacion" style="display:none;" onclick="seleccionarOperacionRejilla('escalera_asc')">
+          <div class="op-card-icon bg-blue"><i class="fa-solid fa-arrow-trend-up"></i></div>
+          <div class="op-card-info">
+            <span class="op-card-title">Escalera Ascendente</span>
+            <span class="op-card-desc">Subir dando saltos desde el menor hasta el mayor</span>
+          </div>
+        </button>
+
+        <button type="button" class="op-card" data-op="escalera_desc" data-cat="comparacion" style="display:none;" onclick="seleccionarOperacionRejilla('escalera_desc')">
+          <div class="op-card-icon bg-teal"><i class="fa-solid fa-arrow-trend-down"></i></div>
+          <div class="op-card-info">
+            <span class="op-card-title">Escalera Descendente</span>
+            <span class="op-card-desc">Bajar dando saltos desde el mayor hasta el menor</span>
+          </div>
+        </button>
+
+        <button type="button" class="op-card" data-op="igualacion" data-cat="comparacion" style="display:none;" onclick="seleccionarOperacionRejilla('igualacion')">
+          <div class="op-card-icon bg-sun"><i class="fa-solid fa-scale-balanced"></i></div>
+          <div class="op-card-info">
+            <span class="op-card-title">Igualación</span>
+            <span class="op-card-desc">Añadir o quitar hasta que dos cantidades sean iguales</span>
+          </div>
+        </button>
+
+        <button type="button" class="op-card" data-op="detraccion_comparacion" data-cat="comparacion" style="display:none;" onclick="seleccionarOperacionRejilla('detraccion_comparacion')">
+          <div class="op-card-icon bg-pink"><i class="fa-solid fa-people-arrows"></i></div>
+          <div class="op-card-info">
+            <span class="op-card-title">Detracción con Comparación</span>
+            <span class="op-card-desc">Quitar lo mismo a dos montones para ver cuál tiene más</span>
+          </div>
+        </button>
+
+        <!-- Categoría: 3 Números -->
+        <button type="button" class="op-card" data-op="doblesuma" data-cat="triples" style="display:none;" onclick="seleccionarOperacionRejilla('doblesuma')">
+          <div class="op-card-icon bg-purple"><i class="fa-solid fa-plus-minus"></i></div>
+          <div class="op-card-info">
+            <span class="op-card-title">Doble Suma (+ +)</span>
+            <span class="op-card-desc">Sumar tres números juntándolos en el primero</span>
+          </div>
+        </button>
+
+        <button type="button" class="op-card" data-op="dobleresta" data-cat="triples" style="display:none;" onclick="seleccionarOperacionRejilla('dobleresta')">
+          <div class="op-card-icon bg-red"><i class="fa-solid fa-circle-minus"></i></div>
+          <div class="op-card-info">
+            <span class="op-card-title">Doble Resta (- -)</span>
+            <span class="op-card-desc">Al número grande le quitamos otros dos números</span>
+          </div>
+        </button>
+
+        <button type="button" class="op-card" data-op="sumiresta" data-cat="triples" style="display:none;" onclick="seleccionarOperacionRejilla('sumiresta')">
+          <div class="op-card-icon bg-indigo"><i class="fa-solid fa-shuffle"></i></div>
+          <div class="op-card-info">
+            <span class="op-card-title">Sumirresta (+ -)</span>
+            <span class="op-card-desc">1º Sumamos el del medio y 2º restamos el último</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Select oculto sincronizado por compatibilidad -->
+      <select id="operacion" onchange="onSelectOperacionChange()" style="display:none;" aria-label="Tipo de operación">
+        <option value="suma">Suma</option>
+        <option value="resta">Resta</option>
+        <option value="escalera_asc">Escalera Ascendente</option>
+        <option value="escalera_desc">Escalera Descendente</option>
+        <option value="igualacion">Igualación</option>
+        <option value="detraccion_comparacion">Detracción con Comparación</option>
+        <option value="doblesuma">Doble Suma</option>
+        <option value="dobleresta">Doble Resta</option>
+        <option value="sumiresta">Sumiresta</option>
+      </select>
+
+      <!-- Tarjeta explicativa visual del modo elegido -->
+      <div class="guide-box" id="guideBox">
+        <div class="guide-header">
+          <div class="guide-title-wrap">
+            <span class="guide-badge" id="guideBadge"><i class="fa-solid fa-lightbulb"></i> ¿Cómo se juega?</span>
+            <h3 id="guideTitle">Suma en Rejilla</h3>
+          </div>
+          <button type="button" class="btn-secondary btn-sm" id="btnToggleExample" onclick="toggleEjemploGuia()">
+            <i class="fa-solid fa-eye"></i> Ver ejemplo resuelto
+          </button>
+        </div>
+        <p id="guideDescription" class="guide-desc">
+          Pasa cantidades del segundo número al primero paso a paso hasta que en la última columna quede un <strong>0</strong>.
+        </p>
+
+        <!-- Sub-selector opcional para Igualación (Subir del menor al mayor o Bajar del mayor al menor) -->
+        <div id="igualacionSubModeWrap" class="igualacion-submode" style="display:none;">
+          <span><strong>¿Cómo quieres igualar?</strong></span>
+          <label class="radio-pill">
+            <input type="radio" name="modoIgualacion" value="asc" checked onchange="actualizarGuiaOperacion()">
+            <span><i class="fa-solid fa-arrow-up"></i> Añadir al menor hasta igualar al mayor</span>
+          </label>
+          <label class="radio-pill">
+            <input type="radio" name="modoIgualacion" value="desc" onchange="actualizarGuiaOperacion()">
+            <span><i class="fa-solid fa-arrow-down"></i> Quitar al mayor hasta igualar al menor</span>
+          </label>
+        </div>
+
+        <div id="guideExampleContainer" class="guide-example" style="display:none;">
+          <!-- Se rellena dinámicamente con una mini-tabla de ejemplo claro -->
+        </div>
+      </div>
     </div>
-    <div class="exercise" id="ejercicio"></div>
+
+    <!-- Paso 2: Elegir nivel y comenzar -->
+    <div class="step-section controls-bar">
+      <div class="control-group">
+        <label for="nivel"><i class="fa-solid fa-gauge-high"></i> Nivel de números:</label>
+        <select id="nivel">
+          <option value="1">Nivel 1 · Hasta 50</option>
+          <option value="2">Nivel 2 · Hasta 100</option>
+          <option value="3">Nivel 3 · Hasta 500</option>
+          <option value="4">Nivel 4 · Hasta 1.000</option>
+          <option value="5">Nivel 5 · Hasta 5.000</option>
+          <option value="6">Nivel 6 · Hasta 10.000</option>
+        </select>
+      </div>
+
+      <div class="action-buttons">
+        <button type="button" onclick="iniciarEjercicio()">
+          <i class="fa-solid fa-dice"></i> Números Aleatorios
+        </button>
+        <button type="button" class="btn-secondary" onclick="mostrarInputPersonalizadoRejilla()">
+          <i class="fa-solid fa-pen-to-square"></i> Elegir mis Números
+        </button>
+      </div>
+    </div>
+
+    <!-- Panel de números personalizados -->
+    <div id="customInputContainerRejilla" class="custom-input-panel" style="display: none;">
+      <div class="custom-inputs-row">
+        <div class="custom-field">
+          <label for="num1Personalizado">1º Número:</label>
+          <input type="number" id="num1Personalizado" min="0" placeholder="Ej: 45">
+        </div>
+        <div class="custom-field">
+          <label for="num2Personalizado">2º Número:</label>
+          <input type="number" id="num2Personalizado" min="0" placeholder="Ej: 23">
+        </div>
+        <div class="custom-field" id="contenedorNum3" style="display: none;">
+          <label for="num3Personalizado">3º Número:</label>
+          <input type="number" id="num3Personalizado" min="0" placeholder="Ej: 12">
+        </div>
+        <button type="button" class="btn-warm" onclick="iniciarEjercicioPersonalizado()">
+          <i class="fa-solid fa-play"></i> Crear Rejilla
+        </button>
+      </div>
+    </div>
+
+    <!-- Zona del ejercicio activo -->
+    <div class="exercise" id="ejercicio">
+      <div class="empty-state">
+        <i class="fa-solid fa-hand-pointer"></i>
+        <p>Pulsa en <strong>"Números Aleatorios"</strong> o <strong>"Elegir mis Números"</strong> para empezar a resolver tu rejilla.</p>
+      </div>
+    </div>
   </div>
+
   <div id="cookie-modal-container"></div>
 
-  <script src="js/rejilla.js?v=1.0.3"></script>
-  <script src="js/navbar.js?v=1.0.3"></script>
-  <script src="js/footer.js?v=1.0.3"></script>
+  <script src="js/rejilla.js?v=2.0.0"></script>
+  <script src="js/navbar.js?v=1.0.5"></script>
+  <script src="js/footer.js?v=1.0.4"></script>
   <script src="js/cookie-modal.js?v=1.0.3"></script>
   <script src="js/analytics.js?v=1.0.3"></script>
 </body>
