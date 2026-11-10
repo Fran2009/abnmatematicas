@@ -1,6 +1,8 @@
 // js/multiplicaciones.js
 
 // Estado global de la práctica
+let modoConfigActual = "rango"; // "rango" o "personalizado"
+let operacionesPersonalizadas = []; // Lista de { a: number, b: number } para modo personalizado
 let ejerciciosPool = [];
 let indiceActual = 0;
 let aciertos = 0;
@@ -17,6 +19,18 @@ function formatearTiempo(segundos) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Pestañas de modo
+  const tabModoRango = document.getElementById("tabModoRango");
+  const tabModoPersonalizado = document.getElementById("tabModoPersonalizado");
+
+  if (tabModoRango) {
+    tabModoRango.addEventListener("click", () => cambiarModoConfig("rango"));
+  }
+  if (tabModoPersonalizado) {
+    tabModoPersonalizado.addEventListener("click", () => cambiarModoConfig("personalizado"));
+  }
+
+  // Botones de modo rango
   const btnComenzar = document.getElementById("btnComenzar");
   const btnReiniciar = document.getElementById("btnReiniciar");
   const btnReiniciarFinal = document.getElementById("btnReiniciarFinal");
@@ -33,7 +47,66 @@ document.addEventListener("DOMContentLoaded", () => {
     btnReiniciarFinal.addEventListener("click", reiniciarPractica);
   }
 
-  // Escuchar cambios en la configuración para actualizar el resumen de combinaciones en vivo
+  // Botones y controles de modo personalizado
+  const btnAnadirGrupo = document.getElementById("btnAnadirGrupo");
+  const btnAnadirUno = document.getElementById("btnAnadirUno");
+  const btnVaciarCustom = document.getElementById("btnVaciarCustom");
+  const btnComenzarCustom = document.getElementById("btnComenzarCustom");
+  const btnReiniciarCustom = document.getElementById("btnReiniciarCustom");
+  const customGrupoInput = document.getElementById("customGrupoInput");
+  const customFactorA = document.getElementById("customFactorA");
+  const customFactorB = document.getElementById("customFactorB");
+
+  if (btnAnadirGrupo) {
+    btnAnadirGrupo.addEventListener("click", anadirOperacionesGrupo);
+  }
+
+  if (btnAnadirUno) {
+    btnAnadirUno.addEventListener("click", anadirOperacionIndividual);
+  }
+
+  if (btnVaciarCustom) {
+    btnVaciarCustom.addEventListener("click", vaciarOperacionesCustom);
+  }
+
+  if (btnComenzarCustom) {
+    btnComenzarCustom.addEventListener("click", iniciarPracticaCustom);
+  }
+
+  if (btnReiniciarCustom) {
+    btnReiniciarCustom.addEventListener("click", reiniciarPractica);
+  }
+
+  // Tecla Enter en el input de grupo para añadir directamente
+  if (customGrupoInput) {
+    customGrupoInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        anadirOperacionesGrupo();
+      }
+    });
+  }
+
+  // Tecla Enter en factores individuales
+  if (customFactorA) {
+    customFactorA.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        customFactorB?.focus();
+      }
+    });
+  }
+
+  if (customFactorB) {
+    customFactorB.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        anadirOperacionIndividual();
+      }
+    });
+  }
+
+  // Escuchar cambios en la configuración de rango para actualizar el resumen de combinaciones en vivo
   const inputsConfig = [
     document.getElementById("tablaDesde"),
     document.getElementById("tablaHasta"),
@@ -49,9 +122,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Permitir pulsar Enter en los inputs de configuración para comenzar
-  const configInputs = document.querySelectorAll(".config-panel input");
-  configInputs.forEach((inp) => {
+  // Permitir pulsar Enter en los inputs del modo rango para comenzar
+  const configInputsRango = document.querySelectorAll("#seccionModoRango input");
+  configInputsRango.forEach((inp) => {
     inp.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         iniciarPractica();
@@ -60,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   calcularInfoCombinaciones();
+  renderChipsCustom();
 });
 
 /**
@@ -110,6 +184,7 @@ function calcularInfoCombinaciones() {
  * Inicia la práctica de multiplicaciones según el modo de cantidad configurado
  */
 function iniciarPractica() {
+  modoConfigActual = "rango";
   const inputDesde = document.getElementById("tablaDesde");
   const inputHasta = document.getElementById("tablaHasta");
   const inputMultHasta = document.getElementById("multiplicarHasta");
@@ -439,11 +514,281 @@ function mostrarMensajeFinal() {
 }
 
 /**
- * Reinicia la sesión de práctica
+ * Reinicia la sesión de práctica según el modo activo
  */
 function reiniciarPractica() {
-  iniciarPractica();
+  if (modoConfigActual === "personalizado") {
+    iniciarPracticaCustom();
+  } else {
+    iniciarPractica();
+  }
 }
+
+/**
+ * Cambia entre el modo por rango de tablas y multiplicaciones personalizadas
+ */
+function cambiarModoConfig(nuevoModo) {
+  modoConfigActual = nuevoModo;
+
+  const tabRango = document.getElementById("tabModoRango");
+  const tabCustom = document.getElementById("tabModoPersonalizado");
+  const secRango = document.getElementById("seccionModoRango");
+  const secCustom = document.getElementById("seccionModoPersonalizado");
+
+  if (nuevoModo === "personalizado") {
+    tabRango?.classList.remove("active");
+    tabCustom?.classList.add("active");
+    if (secRango) secRango.style.display = "none";
+    if (secCustom) secCustom.style.display = "block";
+
+    const inputGrupo = document.getElementById("customGrupoInput");
+    if (inputGrupo && operacionesPersonalizadas.length === 0) {
+      setTimeout(() => inputGrupo.focus(), 60);
+    }
+  } else {
+    tabCustom?.classList.remove("active");
+    tabRango?.classList.add("active");
+    if (secCustom) secCustom.style.display = "none";
+    if (secRango) secRango.style.display = "block";
+  }
+}
+
+/**
+ * Añade una multiplicación individual { a, b } desde los dos inputs numéricos
+ */
+function anadirOperacionIndividual() {
+  const inputA = document.getElementById("customFactorA");
+  const inputB = document.getElementById("customFactorB");
+  if (!inputA || !inputB) return;
+
+  const aVal = inputA.value.trim();
+  const bVal = inputB.value.trim();
+
+  if (aVal === "" || bVal === "") {
+    mostrarAlertaCustom("Introduce ambos factores de la multiplicación (por ejemplo: 2 y 4).");
+    if (aVal === "") inputA.focus();
+    else inputB.focus();
+    return;
+  }
+
+  const a = parseInt(aVal, 10);
+  const b = parseInt(bVal, 10);
+
+  if (isNaN(a) || isNaN(b) || a < 0 || b < 0) {
+    mostrarAlertaCustom("Por favor, introduce números enteros positivos válidos.");
+    return;
+  }
+
+  ocultarAlertaCustom();
+  operacionesPersonalizadas.push({ a, b });
+  inputA.value = "";
+  inputB.value = "";
+  renderChipsCustom();
+  inputA.focus();
+}
+
+/**
+ * Añade un lote o grupo de multiplicaciones a partir de un texto libre (ej: "2x4, 10x1 y 3x6")
+ */
+function anadirOperacionesGrupo() {
+  const inputGrupo = document.getElementById("customGrupoInput");
+  if (!inputGrupo) return;
+
+  const texto = inputGrupo.value.trim();
+  if (!texto) {
+    mostrarAlertaCustom("Escribe las operaciones que quieras añadir (por ejemplo: 2x4, 10x1, 3x6).");
+    inputGrupo.focus();
+    return;
+  }
+
+  // Detecta multiplicaciones con conectores: x, X, *, ×, · o la palabra "por"
+  const regex = /(\d+)\s*(?:[*xX×·]|por)\s*(\d+)/gi;
+  let match;
+  let totalAnadidas = 0;
+
+  while ((match = regex.exec(texto)) !== null) {
+    const a = parseInt(match[1], 10);
+    const b = parseInt(match[2], 10);
+    if (!isNaN(a) && !isNaN(b)) {
+      operacionesPersonalizadas.push({ a, b });
+      totalAnadidas++;
+    }
+  }
+
+  if (totalAnadidas === 0) {
+    mostrarAlertaCustom("No se detectaron multiplicaciones válidas. Utiliza el formato número x número (por ejemplo: 2x4, 10x1, 3x6).");
+    inputGrupo.focus();
+    return;
+  }
+
+  ocultarAlertaCustom();
+  inputGrupo.value = "";
+  renderChipsCustom();
+}
+
+/**
+ * Elimina una multiplicación de la lista personalizada por su índice
+ */
+function eliminarOperacionCustom(index) {
+  if (index >= 0 && index < operacionesPersonalizadas.length) {
+    operacionesPersonalizadas.splice(index, 1);
+    renderChipsCustom();
+  }
+}
+
+/**
+ * Vacía completamente la lista de multiplicaciones personalizadas
+ */
+function vaciarOperacionesCustom() {
+  operacionesPersonalizadas = [];
+  ocultarAlertaCustom();
+  renderChipsCustom();
+}
+
+/**
+ * Muestra visualmente las multiplicaciones añadidas en forma de etiquetas / chips interactivos
+ */
+function renderChipsCustom() {
+  const container = document.getElementById("listaOperacionesCustom");
+  const badgeCount = document.getElementById("badgeCustomCount");
+  const btnVaciar = document.getElementById("btnVaciarCustom");
+
+  if (!container) return;
+
+  const total = operacionesPersonalizadas.length;
+
+  if (badgeCount) {
+    badgeCount.innerHTML = `<i class="fa-solid fa-list-check"></i> <strong>${total}</strong> ${total === 1 ? "multiplicación añadida" : "multiplicaciones añadidas"}`;
+  }
+
+  if (btnVaciar) {
+    btnVaciar.style.display = total > 0 ? "inline-flex" : "none";
+  }
+
+  if (total === 0) {
+    container.innerHTML = `
+      <div class="custom-chips-empty">
+        <i class="fa-regular fa-clipboard"></i>
+        <span>No has añadido operaciones todavía. Introduce algunas arriba para comenzar el reto.</span>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = "";
+  operacionesPersonalizadas.forEach((op, idx) => {
+    const chip = document.createElement("span");
+    chip.className = "op-chip";
+    chip.innerHTML = `
+      <span class="op-chip-text">${op.a} × ${op.b}</span>
+      <button type="button" class="op-chip-del" title="Eliminar ${op.a} × ${op.b}" aria-label="Eliminar ${op.a} por ${op.b}">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    `;
+
+    chip.querySelector(".op-chip-del").addEventListener("click", () => {
+      eliminarOperacionCustom(idx);
+    });
+
+    container.appendChild(chip);
+  });
+}
+
+/**
+ * Inicia la práctica con las operaciones personalizadas añadidas
+ */
+function iniciarPracticaCustom() {
+  modoConfigActual = "personalizado";
+
+  if (operacionesPersonalizadas.length === 0) {
+    mostrarAlertaCustom("Por favor, añade al menos una multiplicación antes de comenzar (ej: 2x4, 10x1, 3x6).");
+    const inputGrupo = document.getElementById("customGrupoInput");
+    if (inputGrupo) inputGrupo.focus();
+    return;
+  }
+
+  ocultarAlertaCustom();
+
+  // Construir pool a partir de la lista
+  ejerciciosPool = operacionesPersonalizadas.map((op) => ({
+    a: op.a,
+    b: op.b,
+    resultado: op.a * op.b
+  }));
+
+  // Barajar si está activada la opción de orden aleatorio
+  const checkAleatorio = document.getElementById("checkOrdenAleatorioCustom");
+  if (checkAleatorio && checkAleatorio.checked) {
+    for (let i = ejerciciosPool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [ejerciciosPool[i], ejerciciosPool[j]] = [ejerciciosPool[j], ejerciciosPool[i]];
+    }
+  }
+
+  // Inicializar estado de estadísticas y ronda
+  indiceActual = 0;
+  aciertos = 0;
+  errores = 0;
+  haFalladoFilaActual = false;
+  totalEjercicios = ejerciciosPool.length;
+
+  // Iniciar cronómetro y estadísticas
+  if (cronometroInterval) clearInterval(cronometroInterval);
+  tiempoSegundos = 0;
+  const statsSection = document.getElementById("statsSection");
+  if (statsSection) statsSection.style.display = "flex";
+
+  const cronoEl = document.getElementById("cronometroTiempo");
+  if (cronoEl) cronoEl.textContent = "00:00";
+  const aciertosEl = document.getElementById("contadorAciertos");
+  if (aciertosEl) aciertosEl.textContent = "0";
+  const erroresEl = document.getElementById("contadorErrores");
+  if (erroresEl) erroresEl.textContent = "0";
+
+  cronometroInterval = setInterval(() => {
+    tiempoSegundos++;
+    const crono = document.getElementById("cronometroTiempo");
+    if (crono) crono.textContent = formatearTiempo(tiempoSegundos);
+  }, 1000);
+
+  // Limpiar contenedor de filas
+  const container = document.getElementById("ejerciciosContainer");
+  container.innerHTML = "";
+
+  const mensajeFinal = document.getElementById("mensajeFinal");
+  mensajeFinal.style.display = "none";
+
+  // Mostrar área de juego y progreso
+  document.getElementById("zonaPractica").style.display = "block";
+  document.getElementById("progressSection").style.display = "block";
+
+  actualizarProgreso();
+
+  // Generar primera fila
+  generarFila(indiceActual);
+}
+
+/**
+ * Muestra mensaje de aviso o error en el panel de multiplicaciones personalizadas
+ */
+function mostrarAlertaCustom(msg) {
+  const alerta = document.getElementById("alertaCustom");
+  if (!alerta) return;
+  alerta.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <span>${msg}</span>`;
+  alerta.style.display = "flex";
+}
+
+/**
+ * Oculta el mensaje de aviso
+ */
+function ocultarAlertaCustom() {
+  const alerta = document.getElementById("alertaCustom");
+  if (alerta) alerta.style.display = "none";
+}
+
+// Exponer funciones globales necesarias
+window.cambiarModoConfig = cambiarModoConfig;
+window.eliminarOperacionCustom = eliminarOperacionCustom;
 
 /**
  * Animación de confeti ligera con Canvas HTML5 sin librerías externas

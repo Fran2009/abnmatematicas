@@ -15,7 +15,7 @@ El método ABN es una forma alternativa de enseñar matemáticas basada en la de
   - **Operaciones Básicas:** Suma y Resta por detracción.
   - **Comparación, Escaleras e Igualación ABN:** Escalera Ascendente, Escalera Descendente, Igualación y Detracción con Comparación.
   - **Operaciones de 3 Números:** Doble Suma, Doble Resta y Sumirresta.
-- **Multiplicaciones:** Práctica configurable de tablas de multiplicar (todas las combinaciones sin repetición o un número determinado de preguntas) con cronómetro, aciertos y fallos interactivos.
+- **Multiplicaciones:** Práctica configurable tanto por tablas y rangos como con multiplicaciones personalizadas (añadiendo grupos de operaciones como 2x4, 10x1, etc.), con cronómetro, estadísticas de aciertos y fallos en vivo y validación interactiva.
 - **Vídeos de Ejemplos:** Enlaces a recursos audiovisuales para aprender el método paso a paso.
 
 ## 🌐 Estructura del Proyecto

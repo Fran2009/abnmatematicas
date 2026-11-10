@@ -6,7 +6,7 @@
   <title>Método ABN - Tablas de Multiplicar</title>
   <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/multiplicaciones.css">
+  <link rel="stylesheet" href="css/multiplicaciones.css?v=1.0.4">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="css/cookie-modal.css">
@@ -21,64 +21,165 @@
         En el método ABN, dominar las tablas de multiplicar permite desarrollar un cálculo mental ágil y flexible.
       </p>
       <p>
-        Elige desde qué tabla y hasta qué tabla quieres repasar y pulsa en <strong>"Comenzar"</strong>. Si tu respuesta es correcta se pondrá en <strong style="color: #2e7d32;">verde</strong> y saldrá la siguiente; si te equivocas se pondrá en <strong style="color: #c62828;">rojo</strong> para que puedas intentarlo de nuevo.
+        Practica por <strong>rangos de tablas</strong> o añade tus propias <strong>multiplicaciones personalizadas</strong> (en grupo o individuales) y pulsa en <strong>"Comenzar"</strong>. Si tu respuesta es correcta se pondrá en <strong style="color: #2e7d32;">verde</strong> y saldrá la siguiente; si te equivocas se pondrá en <strong style="color: #c62828;">rojo</strong> para que puedas intentarlo de nuevo.
       </p>
     </div>
 
-    <!-- Panel de configuración del rango -->
+    <!-- Panel de configuración del reto -->
     <div class="config-panel">
-      <h2><i class="fas fa-sliders"></i> Configura tu reto de tablas</h2>
-      <div class="config-grid">
-        <div class="config-item">
-          <label for="tablaDesde">Desde la tabla del:</label>
-          <input type="number" id="tablaDesde" value="2" min="1" max="50">
+      <!-- Pestañas para elegir modo: Por Tablas o Personalizadas -->
+      <div class="modo-tabs">
+        <button type="button" class="modo-tab-btn active" id="tabModoRango">
+          <i class="fa-solid fa-table-list"></i> Por Tablas y Rango
+        </button>
+        <button type="button" class="modo-tab-btn" id="tabModoPersonalizado">
+          <i class="fa-solid fa-pen-to-square"></i> Multiplicaciones Personalizadas
+        </button>
+      </div>
+
+      <!-- Modo 1: Por Rango de Tablas -->
+      <div id="seccionModoRango">
+        <h2 class="config-subtitle"><i class="fas fa-sliders"></i> Configura tu reto por tablas</h2>
+        <div class="config-grid">
+          <div class="config-item">
+            <label for="tablaDesde">Desde la tabla del:</label>
+            <input type="number" id="tablaDesde" value="2" min="1" max="50">
+          </div>
+
+          <div class="config-item">
+            <label for="tablaHasta">Hasta la tabla del:</label>
+            <input type="number" id="tablaHasta" value="12" min="1" max="50">
+          </div>
+
+          <div class="config-item">
+            <label for="multiplicarHasta">Multiplicar hasta el:</label>
+            <input type="number" id="multiplicarHasta" value="12" min="1" max="50">
+          </div>
+
+          <div class="config-item">
+            <label for="tipoCantidad">Preguntas:</label>
+            <select id="tipoCantidad" class="config-select">
+              <option value="todas">Todas las combinaciones</option>
+              <option value="10">10 ejercicios</option>
+              <option value="20">20 ejercicios</option>
+              <option value="50">50 ejercicios</option>
+              <option value="custom">Elegir cantidad...</option>
+            </select>
+            <input
+              type="number"
+              id="cantidadPersonalizada"
+              value="10"
+              min="1"
+              max="500"
+              style="display: none; width: 75px;"
+              placeholder="Cant."
+              aria-label="Cantidad de ejercicios personalizada"
+            />
+          </div>
         </div>
 
-        <div class="config-item">
-          <label for="tablaHasta">Hasta la tabla del:</label>
-          <input type="number" id="tablaHasta" value="12" min="1" max="50">
+        <div style="margin-top: 12px;">
+          <span id="infoCombinaciones" class="info-combinaciones">
+            <i class="fa-solid fa-circle-info"></i> Calculando combinaciones...
+          </span>
         </div>
 
-        <div class="config-item">
-          <label for="multiplicarHasta">Multiplicar hasta el:</label>
-          <input type="number" id="multiplicarHasta" value="12" min="1" max="50">
-        </div>
-
-        <div class="config-item">
-          <label for="tipoCantidad">Preguntas:</label>
-          <select id="tipoCantidad" class="config-select">
-            <option value="todas">Todas las combinaciones</option>
-            <option value="10">10 ejercicios</option>
-            <option value="20">20 ejercicios</option>
-            <option value="50">50 ejercicios</option>
-            <option value="custom">Elegir cantidad...</option>
-          </select>
-          <input
-            type="number"
-            id="cantidadPersonalizada"
-            value="10"
-            min="1"
-            max="500"
-            style="display: none; width: 75px;"
-            placeholder="Cant."
-            aria-label="Cantidad de ejercicios personalizada"
-          />
+        <div class="config-actions">
+          <button id="btnComenzar" class="btn btn-primary">
+            <i class="fas fa-play"></i> Comenzar
+          </button>
+          <button id="btnReiniciar" class="btn btn-secondary">
+            <i class="fas fa-rotate-right"></i> Reiniciar
+          </button>
         </div>
       </div>
 
-      <div style="margin-top: 10px;">
-        <span id="infoCombinaciones" class="info-combinaciones">
-          <i class="fa-solid fa-circle-info"></i> Calculando combinaciones...
-        </span>
-      </div>
+      <!-- Modo 2: Multiplicaciones Personalizadas -->
+      <div id="seccionModoPersonalizado" style="display: none;">
+        <h2 class="config-subtitle"><i class="fa-solid fa-pen-to-square"></i> Elige tus multiplicaciones a medida</h2>
+        <p class="custom-intro-desc">
+          Añade las multiplicaciones que quieras resolver. Puedes añadir un <strong>grupo completo</strong> separadas por comas (por ejemplo: <code>2x4, 10x1, 3x6</code>) o introducirlas de una en una.
+        </p>
 
-      <div class="config-actions">
-        <button id="btnComenzar" class="btn btn-primary">
-          <i class="fas fa-play"></i> Comenzar
-        </button>
-        <button id="btnReiniciar" class="btn btn-secondary">
-          <i class="fas fa-rotate-right"></i> Reiniciar
-        </button>
+        <!-- Bloque de introducción de operaciones -->
+        <div class="custom-entry-box">
+          <!-- Opción A: Añadir en grupo -->
+          <div class="custom-group-wrap">
+            <label for="customGrupoInput" class="custom-label">
+              <i class="fa-solid fa-layer-group"></i> Añadir grupo de operaciones:
+            </label>
+            <div class="custom-input-with-button">
+              <input
+                type="text"
+                id="customGrupoInput"
+                class="input-custom-text"
+                placeholder="Ej: 2x4, 10x1, 3x6"
+                aria-label="Grupo de multiplicaciones separadas por comas"
+              />
+              <button type="button" id="btnAnadirGrupo" class="btn btn-warm">
+                <i class="fa-solid fa-plus"></i> Añadir grupo
+              </button>
+            </div>
+            <span class="custom-hint">Acepta formatos como <code>2x4</code>, <code>10*1</code> o <code>3×6</code> separados por comas o espacios.</span>
+          </div>
+
+          <div class="custom-separator">
+            <span>o añade una a una</span>
+          </div>
+
+          <!-- Opción B: Añadir individual -->
+          <div class="custom-single-wrap">
+            <label class="custom-label">
+              <i class="fa-solid fa-calculator"></i> Añadir una operación:
+            </label>
+            <div class="custom-single-row">
+              <input type="number" id="customFactorA" min="0" max="9999" placeholder="Factor" aria-label="Primer factor">
+              <span class="custom-times-symbol">×</span>
+              <input type="number" id="customFactorB" min="0" max="9999" placeholder="Factor" aria-label="Segundo factor">
+              <button type="button" id="btnAnadirUno" class="btn btn-secondary">
+                <i class="fa-solid fa-plus"></i> Añadir
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alerta de validación personalizada -->
+        <div id="alertaCustom" class="alerta-custom" style="display: none;"></div>
+
+        <!-- Cabecera de la lista de operaciones -->
+        <div class="custom-list-bar">
+          <div class="custom-list-info">
+            <span id="badgeCustomCount" class="badge-custom-count">
+              <i class="fa-solid fa-list-check"></i> <strong>0</strong> multiplicaciones añadidas
+            </span>
+          </div>
+          <div class="custom-list-actions">
+            <label class="custom-checkbox-label" title="Barajar las operaciones antes de resolverlas">
+              <input type="checkbox" id="checkOrdenAleatorioCustom" checked>
+              <span><i class="fa-solid fa-shuffle"></i> Orden aleatorio</span>
+            </label>
+            <button type="button" id="btnVaciarCustom" class="btn-vaciar-custom" style="display: none;">
+              <i class="fa-solid fa-trash-can"></i> Vaciar lista
+            </button>
+          </div>
+        </div>
+
+        <!-- Contenedor de etiquetas/chips de operaciones -->
+        <div id="listaOperacionesCustom" class="custom-chips-box">
+          <div class="custom-chips-empty">
+            <i class="fa-regular fa-clipboard"></i>
+            <span>No has añadido operaciones todavía. Introduce algunas arriba para comenzar el reto.</span>
+          </div>
+        </div>
+
+        <div class="config-actions">
+          <button id="btnComenzarCustom" class="btn btn-primary">
+            <i class="fas fa-play"></i> Comenzar
+          </button>
+          <button id="btnReiniciarCustom" class="btn btn-secondary">
+            <i class="fas fa-rotate-right"></i> Reiniciar
+          </button>
+        </div>
       </div>
     </div>
 
@@ -133,7 +234,7 @@
 
   <div id="cookie-modal-container"></div>
 
-  <script src="js/multiplicaciones.js?v=1.0.3"></script>
+  <script src="js/multiplicaciones.js?v=1.0.4"></script>
   <script src="js/navbar.js?v=1.0.5"></script>
   <script src="js/footer.js?v=1.0.4"></script>
   <script src="js/cookie-modal.js?v=1.0.3"></script>
