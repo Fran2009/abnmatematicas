@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { href: "casita.html", label: "Casita", icon: "fa-solid fa-house-chimney-window" },
     { href: "soles.html", label: "Soles ABN", icon: "fa-solid fa-sun" },
     { href: "rejilla.html", label: "Rejilla", icon: "fa-solid fa-border-all" },
-    { href: "multiplicaciones.html", label: "Multiplicar", icon: "fa-solid fa-xmark" },
+    { href: "multiplicaciones.html", label: "Multiplicaciones", icon: "fa-solid fa-xmark" },
     { href: "videos.html", label: "Vídeos", icon: "fa-solid fa-circle-play" }
   ];
 

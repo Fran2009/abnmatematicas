@@ -2,7 +2,12 @@
 @import url('theme.css');
 
 .home-container {
-  max-width: 960px;
+  max-width: 980px;
+  margin: 20px auto;
+  padding: 0 16px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   text-align: center;
 }
 
@@ -11,47 +16,121 @@
   border: 2px solid #d1c4e9;
   border-radius: 18px;
   padding: 24px 22px;
-  margin-bottom: 26px;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #ffca28;
-  color: #4a148c;
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 0.92rem;
-  padding: 6px 14px;
-  border-radius: 999px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(103, 58, 183, 0.08);
 }
 
 .hero-header h1 {
-  margin: 6px 0 12px 0;
-  font-size: 2.2rem;
+  margin: 0 0 10px 0;
+  font-size: 2.25rem;
   color: #4527a0;
+  line-height: 1.25;
 }
 
 .intro {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   margin: 0 auto;
-  max-width: 760px;
+  max-width: 720px;
   color: #374151;
-  line-height: 1.6;
+  line-height: 1.5;
   text-align: center;
 }
 
-.section-heading {
-  font-size: 1.35rem;
+/* Ficha desplegable explicativa para docentes y familias */
+.pedagogy-drawer {
+  margin-top: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid #d1c4e9;
+  border-radius: 12px;
+  text-align: left;
+  max-width: 740px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.pedagogy-drawer summary {
+  padding: 10px 14px;
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 600;
   color: #512da8;
-  margin: 10px 0 18px 0;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.pedagogy-drawer summary::-webkit-details-marker {
+  display: none;
+}
+
+.pedagogy-drawer summary:hover {
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.pedagogy-body {
+  padding: 12px 16px 14px 16px;
+  border-top: 1px solid #ede7f6;
+  font-size: 0.92rem;
+  color: #4b5563;
+  line-height: 1.55;
+}
+
+.pedagogy-body p {
+  margin: 0;
+}
+
+.section-heading {
+  font-size: 1.65rem;
+  color: #512da8;
+  margin: 10px 0 14px 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+}
+
+/* Filtro rápido por nivel/etapa escolar */
+.stage-filters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.stage-filter-btn {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1.5px solid #d1c4e9;
+  background: #ffffff;
+  color: #512da8;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  min-height: 40px;
+}
+
+.stage-filter-btn:hover {
+  background: #ede7f6;
+  border-color: #673ab7;
+}
+
+.stage-filter-btn.active {
+  background: #673ab7;
+  color: #ffffff;
+  border-color: #673ab7;
+  box-shadow: 0 4px 10px rgba(103, 58, 183, 0.25);
 }
 
 /* Grid de tarjetas de actividades */
@@ -60,7 +139,7 @@
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   gap: 18px;
 }
 
@@ -95,14 +174,22 @@
   position: absolute;
   top: 12px;
   right: 12px;
-  background: linear-gradient(135deg, #ff7043, #f4511e);
-  color: #fff;
+  background: linear-gradient(135deg, #c62828, #b71c1c);
+  color: #ffffff;
   font-family: var(--font-heading);
   font-size: 0.78rem;
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 999px;
-  box-shadow: 0 2px 6px rgba(244, 81, 30, 0.3);
+  box-shadow: 0 2px 6px rgba(183, 28, 28, 0.35);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 12px;
 }
 
 .card-icon {
@@ -113,13 +200,49 @@
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  margin-bottom: 12px;
+}
+
+.badge-stage {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-heading);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+.badge-stage.stage-infantil {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+
+.badge-stage.stage-primaria {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+.badge-stage.stage-avanzado {
+  background: #fdf2f8;
+  color: #be185d;
+  border-color: #fbcfe8;
+}
+
+.card-body {
+  flex-grow: 1;
 }
 
 .card-body h3 {
   margin: 0 0 6px 0;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: #1f2937;
+  line-height: 1.35;
 }
 
 .card-body p {
@@ -141,20 +264,20 @@
   margin-top: auto;
 }
 
-/* Colores temáticos por tarjeta */
+/* Colores temáticos por tarjeta con contrastes WCAG AA verificados */
 .card-blue { border-color: #b3e5fc; background: linear-gradient(180deg, #ffffff 0%, #f4fbff 100%); }
 .card-blue .card-icon { background: #e1f5fe; color: #0288d1; }
-.card-blue .card-cta { background: #e1f5fe; color: #0277bd; }
+.card-blue .card-cta { background: #e1f5fe; color: #01579b; }
 .card-blue:hover { border-color: #29b6f6; }
 
 .card-purple { border-color: #d1c4e9; background: linear-gradient(180deg, #ffffff 0%, #f9f6ff 100%); }
 .card-purple .card-icon { background: #ede7f6; color: #673ab7; }
-.card-purple .card-cta { background: #ede7f6; color: #512da8; }
+.card-purple .card-cta { background: #ede7f6; color: #4a148c; }
 .card-purple:hover { border-color: #7e57c2; }
 
 .card-sun { border-color: #ffe082; background: linear-gradient(180deg, #ffffff 0%, #fffdf2 100%); }
 .card-sun .card-icon { background: #fff8e1; color: #ff8f00; }
-.card-sun .card-cta { background: #fff8e1; color: #ef6c00; }
+.card-sun .card-cta { background: #fff8e1; color: #b75200; }
 .card-sun:hover { border-color: #ffb300; }
 
 .card-green { border-color: #c8e6c9; background: linear-gradient(180deg, #ffffff 0%, #f4fbf5 100%); }
@@ -172,38 +295,17 @@
 .card-teal .card-cta { background: #e0f2f1; color: #00695c; }
 .card-teal:hover { border-color: #26a69a; }
 
-.open-source-note {
-  margin-top: 26px;
-  padding: 12px 16px;
-  background-color: #f8fafc;
-  border: 1px dashed #cbd5e1;
-  border-radius: 12px;
-  font-size: 0.92rem;
-  color: #475569;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.open-source-note a {
-  color: var(--abn-primary);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.open-source-note a:hover {
-  text-decoration: underline;
-}
-
 @media (max-width: 600px) {
   .hero-header {
     padding: 18px 14px;
   }
 
   .hero-header h1 {
-    font-size: 1.65rem;
+    font-size: 1.75rem;
+  }
+
+  .section-heading {
+    font-size: 1.4rem;
   }
 
   .sections {

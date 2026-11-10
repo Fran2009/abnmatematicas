@@ -12,103 +12,164 @@
   <link rel="stylesheet" href="css/cookie-modal.css">
 </head>
 <body>
-  <div class="container home-container">
-    <div class="hero-header">
-      <div class="hero-badge">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> Aprende jugando con los números
-      </div>
+  <main class="container home-container">
+    <header class="hero-header">
       <h1>Método ABN de Matemáticas</h1>
       <p class="intro">
-        El método <strong>ABN (Algoritmos Basados en Números)</strong>, creado por <strong>Jaime Martínez Montero</strong>, ayuda a niños y niñas a comprender las matemáticas de forma visual, manipulativa y natural, potenciando el cálculo mental a su propio ritmo.
+        ¡Aprende y diviértete calculando a tu manera con actividades visuales e interactivas!
       </p>
-    </div>
+      <details class="pedagogy-drawer">
+        <summary>
+          <i class="fa-solid fa-circle-info" aria-hidden="true"></i> ¿Qué es el Método ABN? (Para Familias y Docentes)
+        </summary>
+        <div class="pedagogy-body">
+          <p>
+            El método <strong>ABN (Algoritmos Basados en Números)</strong>, creado por <strong>Jaime Martínez Montero</strong>, ayuda a niños y niñas a comprender las matemáticas de forma visual, manipulativa y natural, fomentando el cálculo mental flexible y el razonamiento propio.
+          </p>
+        </div>
+      </details>
+    </header>
 
-    <h2 class="section-heading"><i class="fa-solid fa-gamepad"></i> ¡Elige una actividad para empezar!</h2>
+    <section aria-labelledby="section-title">
+      <h2 id="section-title" class="section-heading">
+        <i class="fa-solid fa-gamepad" aria-hidden="true"></i> ¡Elige una actividad para empezar!
+      </h2>
 
-    <ul class="sections">
-      <li>
-        <a href="numeracion.html" class="activity-card card-blue">
-          <div class="card-icon"><i class="fa-solid fa-table-cells"></i></div>
-          <div class="card-body">
-            <h3>Numeración y Conteo</h3>
-            <p>Explora la tabla del 100 y resuelve sumas y restas buscando el número escondido.</p>
-          </div>
-          <span class="card-cta">Jugar <i class="fa-solid fa-arrow-right"></i></span>
-        </a>
-      </li>
+      <!-- Filtro rápido por etapa educativa -->
+      <div class="stage-filters" role="tablist" aria-label="Filtrar por nivel escolar">
+        <button type="button" class="stage-filter-btn active" data-filter="all" role="tab" aria-selected="true">
+          <i class="fa-solid fa-shapes" aria-hidden="true"></i> Todas las actividades
+        </button>
+        <button type="button" class="stage-filter-btn" data-filter="infantil" role="tab" aria-selected="false">
+          <i class="fa-solid fa-child-reaching" aria-hidden="true"></i> Infantil y 1º
+        </button>
+        <button type="button" class="stage-filter-btn" data-filter="primaria" role="tab" aria-selected="false">
+          <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Primaria (2º a 6º)
+        </button>
+      </div>
 
-      <li>
-        <a href="casita.html" class="activity-card card-purple">
-          <div class="card-icon"><i class="fa-solid fa-house-chimney-window"></i></div>
-          <div class="card-body">
-            <h3>Casita de Descomposición</h3>
-            <p>Reparte el número del tejado en centenas, decenas y unidades de mil formas distintas.</p>
-          </div>
-          <span class="card-cta">Jugar <i class="fa-solid fa-arrow-right"></i></span>
-        </a>
-      </li>
+      <ul class="sections">
+        <li data-stage="infantil">
+          <a href="numeracion.html" class="activity-card card-blue" aria-label="Jugar a Numeración y Conteo: Explora la tabla del 100">
+            <div class="card-top">
+              <div class="card-icon"><i class="fa-solid fa-table-cells" aria-hidden="true"></i></div>
+              <span class="badge-stage stage-infantil">Infantil y 1º</span>
+            </div>
+            <div class="card-body">
+              <h3>Numeración y Conteo</h3>
+              <p>Explora la tabla del 100 y resuelve sumas y restas buscando el número escondido.</p>
+            </div>
+            <span class="card-cta">Jugar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+          </a>
+        </li>
 
-      <li>
-        <a href="soles.html" class="activity-card card-sun">
-          <span class="badge-new">¡Nuevo!</span>
-          <div class="card-icon"><i class="fa-solid fa-sun"></i></div>
-          <div class="card-body">
-            <h3>Los Soles ABN</h3>
-            <p>Ilumina todos los rayos del sol creando sumas, restas y descomposiciones del número central.</p>
-          </div>
-          <span class="card-cta">Jugar <i class="fa-solid fa-arrow-right"></i></span>
-        </a>
-      </li>
+        <li data-stage="infantil">
+          <a href="casita.html" class="activity-card card-purple" aria-label="Jugar a Casita de Descomposición: Reparte el número del tejado">
+            <div class="card-top">
+              <div class="card-icon"><i class="fa-solid fa-house-chimney-window" aria-hidden="true"></i></div>
+              <span class="badge-stage stage-infantil">Infantil y 1º</span>
+            </div>
+            <div class="card-body">
+              <h3>Casita de Descomposición</h3>
+              <p>Reparte el número del tejado en centenas, decenas y unidades de mil formas distintas.</p>
+            </div>
+            <span class="card-cta">Jugar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+          </a>
+        </li>
 
-      <li>
-        <a href="rejilla.html" class="activity-card card-green">
-          <span class="badge-new">¡Mejorado!</span>
-          <div class="card-icon"><i class="fa-solid fa-border-all"></i></div>
-          <div class="card-body">
-            <h3>La Rejilla ABN</h3>
-            <p>Sumas, restas, escalera ascendente y descendente, igualación, comparación y sumirresta paso a paso.</p>
-          </div>
-          <span class="card-cta">Jugar <i class="fa-solid fa-arrow-right"></i></span>
-        </a>
-      </li>
+        <li data-stage="primaria">
+          <a href="soles.html" class="activity-card card-sun" aria-label="Jugar a Los Soles ABN: Ilumina los rayos del sol">
+            <span class="badge-new">¡Nuevo!</span>
+            <div class="card-top">
+              <div class="card-icon"><i class="fa-solid fa-sun" aria-hidden="true"></i></div>
+              <span class="badge-stage stage-primaria">2º a 4º</span>
+            </div>
+            <div class="card-body">
+              <h3>Los Soles ABN</h3>
+              <p>Ilumina todos los rayos del sol creando sumas, restas y descomposiciones del número central.</p>
+            </div>
+            <span class="card-cta">Jugar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+          </a>
+        </li>
 
-      <li>
-        <a href="multiplicaciones.html" class="activity-card card-pink">
-          <span class="badge-new">¡Nuevo!</span>
-          <div class="card-icon"><i class="fa-solid fa-trophy"></i></div>
-          <div class="card-body">
-            <h3>Multiplicaciones</h3>
-            <p>Practica las tablas de multiplicar a tu medida sin repeticiones y consigue el trofeo final.</p>
-          </div>
-          <span class="card-cta">Jugar <i class="fa-solid fa-arrow-right"></i></span>
-        </a>
-      </li>
+        <li data-stage="primaria">
+          <a href="rejilla.html" class="activity-card card-green" aria-label="Jugar a La Rejilla ABN: Operaciones paso a paso">
+            <span class="badge-new">¡Mejorado!</span>
+            <div class="card-top">
+              <div class="card-icon"><i class="fa-solid fa-border-all" aria-hidden="true"></i></div>
+              <span class="badge-stage stage-primaria">2º a 6º</span>
+            </div>
+            <div class="card-body">
+              <h3>La Rejilla ABN</h3>
+              <p>Sumas, restas, escalera ascendente y descendente, igualación, comparación y sumirresta paso a paso.</p>
+            </div>
+            <span class="card-cta">Jugar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+          </a>
+        </li>
 
-      <li>
-        <a href="videos.html" class="activity-card card-teal">
-          <div class="card-icon"><i class="fa-solid fa-circle-play"></i></div>
-          <div class="card-body">
-            <h3>Vídeos de Ejemplos</h3>
-            <p>Aprende cómo funciona cada actividad del método ABN con vídeos cortos y visuales.</p>
-          </div>
-          <span class="card-cta">Ver vídeos <i class="fa-solid fa-arrow-right"></i></span>
-        </a>
-      </li>
-    </ul>
+        <li data-stage="primaria">
+          <a href="multiplicaciones.html" class="activity-card card-pink" aria-label="Jugar a Multiplicaciones: Practica las tablas a tu medida">
+            <span class="badge-new">¡Nuevo!</span>
+            <div class="card-top">
+              <div class="card-icon"><i class="fa-solid fa-xmark" aria-hidden="true"></i></div>
+              <span class="badge-stage stage-avanzado">2º a 6º</span>
+            </div>
+            <div class="card-body">
+              <h3>Multiplicaciones</h3>
+              <p>Practica las tablas de multiplicar a tu medida sin repeticiones y consigue el trofeo final.</p>
+            </div>
+            <span class="card-cta">Jugar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+          </a>
+        </li>
 
-    <div class="open-source-note">
-      <i class="fa-solid fa-heart" style="color: #e91e63;"></i>
-      <span>
-        Proyecto educativo y sin ánimo de lucro para niños, familias y docentes. Abierto a mejoras en el
-        <a href="https://github.com/Fran2009/abnmatematicas/" target="_blank">GitHub del autor</a>.
-      </span>
-    </div>
-  </div>
+        <li data-stage="infantil primaria">
+          <a href="videos.html" class="activity-card card-teal" aria-label="Ver vídeos de ejemplos del método ABN">
+            <div class="card-top">
+              <div class="card-icon"><i class="fa-solid fa-circle-play" aria-hidden="true"></i></div>
+              <span class="badge-stage">Para todos</span>
+            </div>
+            <div class="card-body">
+              <h3>Vídeos de Ejemplos</h3>
+              <p>Aprende cómo funciona cada actividad del método ABN con vídeos cortos y visuales.</p>
+            </div>
+            <span class="card-cta">Ver vídeos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </main>
 
   <div id="cookie-modal-container"></div>
-  <script src="js/navbar.js?v=1.0.5"></script>
-  <script src="js/footer.js?v=1.0.4"></script>
+  <script src="js/navbar.js?v=1.0.6"></script>
+  <script src="js/footer.js?v=1.0.5"></script>
   <script src="js/cookie-modal.js?v=1.0.0"></script>
   <script src="js/analytics.js?v=1.0.4"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const filterBtns = document.querySelectorAll(".stage-filter-btn");
+      const cardItems = document.querySelectorAll(".sections li");
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          filterBtns.forEach(b => {
+            b.classList.remove("active");
+            b.setAttribute("aria-selected", "false");
+          });
+          btn.classList.add("active");
+          btn.setAttribute("aria-selected", "true");
+
+          const filter = btn.getAttribute("data-filter");
+          cardItems.forEach(item => {
+            const stages = (item.getAttribute("data-stage") || "").split(" ");
+            if (filter === "all" || stages.includes(filter)) {
+              item.style.display = "";
+            } else {
+              item.style.display = "none";
+            }
+          });
+        });
+      });
+    });
+  </script>
 </body>
 </html>
